@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32825.248
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyFirstWPFApplication", "MyFirstWPFApplication\MyFirstWPFApplication.csproj", "{14C7EB46-BFAE-49EE-846C-E2B6219DC6E4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{14C7EB46-BFAE-49EE-846C-E2B6219DC6E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14C7EB46-BFAE-49EE-846C-E2B6219DC6E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14C7EB46-BFAE-49EE-846C-E2B6219DC6E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14C7EB46-BFAE-49EE-846C-E2B6219DC6E4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C0327D10-9F94-49C0-A07D-B3ECD88DEBE3}
+	EndGlobalSection
+EndGlobal
