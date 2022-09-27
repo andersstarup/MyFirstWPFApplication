@@ -60,15 +60,16 @@ namespace MyFirstWPFApplication
         private void Board1Selector_Click(object sender, RoutedEventArgs e)
         {
             BoardSel.Content = "Board 1";
+            // Client = new UdpClient();
             localEp = new IPEndPoint(IPAddress.Parse("192.168.1.123"), 69);
-            SendMessage.Visibility = Visibility = Visibility.Visible;
+            SendMessage.Visibility =  Visibility.Visible;
         }
         private void Board2Selector_Click(object sender, RoutedEventArgs e)
         {
             BoardSel.Content = "Board 2";
-            // Client = new UdpClient();
             localEp = new IPEndPoint(IPAddress.Parse("192.168.1.124"), 70);
-            SendMessage.Visibility = Visibility = Visibility.Visible;
+            SendMessage.Visibility = Visibility.Visible;
+
         }
         private void LED_Click(object sender, RoutedEventArgs e)
         {

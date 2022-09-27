@@ -129,8 +129,8 @@
                    x:Name="FreqSel" 
                    >Freq
             </Label>
-            <Slider Minimum="30000"
-                    Maximum="50000" 
+            <Slider Minimum="5000"
+                    Maximum="40000" 
                     TickPlacement="BottomRight" 
                     TickFrequency="100" 
                     Width="140" 
