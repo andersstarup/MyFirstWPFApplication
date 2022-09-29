@@ -59,15 +59,15 @@ namespace MyFirstWPFApplication
         }
         private void Board1Selector_Click(object sender, RoutedEventArgs e)
         {
-            BoardSel.Content = "Board 1";
+            BoardSel.Content = "Step Board";
             // Client = new UdpClient();
-            localEp = new IPEndPoint(IPAddress.Parse("192.168.1.123"), 69);
+            localEp = new IPEndPoint(IPAddress.Parse("192.168.1.123"), 70);
             SendMessage.Visibility =  Visibility.Visible;
         }
         private void Board2Selector_Click(object sender, RoutedEventArgs e)
         {
-            BoardSel.Content = "Board 2";
-            localEp = new IPEndPoint(IPAddress.Parse("192.168.1.124"), 70);
+            BoardSel.Content = "LED Board";
+            localEp = new IPEndPoint(IPAddress.Parse("192.168.1.124"), 69);
             SendMessage.Visibility = Visibility.Visible;
 
         }
@@ -104,13 +104,13 @@ namespace MyFirstWPFApplication
         }
         private void StepF_Click(object sender, RoutedEventArgs e)
         {
-            DirectionStep.Content = "Forward";
-            UdpOut.op1 = 0;
+            DirectionStep.Content = "Clockwise";
+            UdpOut.op1 = 1;
         }
         private void StepB_Click(object sender, RoutedEventArgs e)
         {
-            DirectionStep.Content = "Backward";
-            UdpOut.op1 = 1;
+            DirectionStep.Content = "Counter Clockwise";
+            UdpOut.op1 = 0;
         }
         private void Send_Click(object sender, RoutedEventArgs e)
         {
