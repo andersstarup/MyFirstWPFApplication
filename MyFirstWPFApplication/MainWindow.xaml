@@ -157,15 +157,30 @@
             HorizontalScrollBarVisibility="Auto"
             />
 
-        <StackPanel Name="SendMessage"  HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="1" Grid.RowSpan="2" Visibility="Collapsed" >
+        <StackPanel Name="SendMessage"  HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="1" Grid.RowSpan="1" Visibility="Collapsed" >
             <Button x:Name = "SendMsg"  
                     Content="Send Message"
                     FontSize="28"
-                    HorizontalAlignment="Center"  
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Center" 
                     Height="100" Width="200" 
                     Click="Send_Click" 
                     Cursor="Hand"/>
         </StackPanel>
+
+        <StackPanel Name="ClearTerminal"  HorizontalAlignment="Left" VerticalAlignment="Bottom" Grid.Column="3" Grid.Row="2"  Visibility="Visible" >
+            <Button x:Name = "ClearTerm"  
+                    Content="Clear messages"
+                    FontSize="16"
+                    VerticalAlignment="Bottom"
+                    HorizontalAlignment="Center" 
+                    Height="50" Width="150" 
+                    Click="Clear_Click" 
+                    Cursor="Hand"
+                    Margin="0,0,0,10"/>
+        </StackPanel>
+
+
 
 
         <!--

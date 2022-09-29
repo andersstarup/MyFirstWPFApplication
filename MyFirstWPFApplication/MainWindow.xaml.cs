@@ -49,7 +49,7 @@ namespace MyFirstWPFApplication
 
         UdpClient Client = new UdpClient();
 
-        IPEndPoint localEp = new IPEndPoint(IPAddress.Parse("00.00.00"), 69);
+        IPEndPoint localEp;
 
         byte[] data;
         public MainWindow()
@@ -59,9 +59,9 @@ namespace MyFirstWPFApplication
         }
         private void Board1Selector_Click(object sender, RoutedEventArgs e)
         {
-            BoardSel.Content = "Step Board";
+            BoardSel.Content = "Board 1";
             // Client = new UdpClient();
-            localEp = new IPEndPoint(IPAddress.Parse("192.168.1.123"), 70);
+            localEp = new IPEndPoint(IPAddress.Parse("192.168.1.123"), 69);
             SendMessage.Visibility =  Visibility.Visible;
         }
         private void Board2Selector_Click(object sender, RoutedEventArgs e)
@@ -70,6 +70,8 @@ namespace MyFirstWPFApplication
             localEp = new IPEndPoint(IPAddress.Parse("192.168.1.124"), 69);
             SendMessage.Visibility = Visibility.Visible;
 
+            Scroller.Content += "Target: " + localEp + Environment.NewLine;
+            Scroller.ScrollToBottom();
         }
         private void LED_Click(object sender, RoutedEventArgs e)
         {
@@ -126,7 +128,10 @@ namespace MyFirstWPFApplication
 
                 Client.Close();
 
-                Scroller.Content += text + Environment.NewLine;
+
+                Scroller.Content += "Message recieved from " + localEp + ": " + text + Environment.NewLine;
+
+                //Scroller.Content += "Message recieved from " + localEp + ": " + text + Environment.NewLine;
                 Scroller.ScrollToBottom();
             }
             catch (Exception err)
@@ -164,6 +169,12 @@ namespace MyFirstWPFApplication
         private void slToggle_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             UdpOut.op1 = (byte)slToggle.Value;
+        }
+
+        private void Clear_Click(object sender, RoutedEventArgs e)
+        {
+            Scroller.Content = "";
+            Scroller.ScrollToBottom();
         }
     }
 }
