@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using static System.Net.Mime.MediaTypeNames;
 using System.Windows.Media;
+using System.Threading;
 
 namespace MyFirstWPFApplication
 {
@@ -51,7 +52,7 @@ namespace MyFirstWPFApplication
 
         IPEndPoint localEp;
 
-        byte[] data;
+      
         public MainWindow()
         {
             InitializeComponent();
@@ -60,7 +61,7 @@ namespace MyFirstWPFApplication
         private void Board1Selector_Click(object sender, RoutedEventArgs e)
         {
             BoardSel.Content = "Stepper board";
-            localEp = new IPEndPoint(IPAddress.Parse("192.168.1.123"), 69);
+            localEp = new IPEndPoint(IPAddress.Parse("192.168.1.123"), 70);
             SendMessage.Visibility =  Visibility.Visible;
 
             Scroller.Content += "Target: " + localEp + Environment.NewLine;
@@ -116,25 +117,29 @@ namespace MyFirstWPFApplication
             DirectionStep.Content = "Counter Clockwise";
             UdpOut.op1 = 0;
         }
-        private void Send_Click(object sender, RoutedEventArgs e)
+        private async void  Send_Click(object sender, RoutedEventArgs e)
         {
+
             UdpClient Client = new UdpClient();
             try
             {
+                
                 Client.Connect(localEp);
                 byte[] bytesent = getBytes(UdpOut);
                 Client.Send(bytesent, bytesent.Length);
 
-                data = Client.Receive(ref localEp);
-                string text = Encoding.UTF8.GetString(data);
+                var dataRecieved = await Client.ReceiveAsync();
+                string text = Encoding.UTF8.GetString(dataRecieved.Buffer);
 
                 Client.Close();
 
 
-                Scroller.Content += "Message recieved from " + localEp + ": " + text + Environment.NewLine;
+                Scroller.Content += "Message recieved from " + dataRecieved.RemoteEndPoint + ": " + text + Environment.NewLine;
 
                 //Scroller.Content += "Message recieved from " + localEp + ": " + text + Environment.NewLine;
                 Scroller.ScrollToBottom();
+                
+               
             }
             catch (Exception err)
             {
@@ -179,4 +184,5 @@ namespace MyFirstWPFApplication
             Scroller.ScrollToBottom();
         }
     }
+    
 }
