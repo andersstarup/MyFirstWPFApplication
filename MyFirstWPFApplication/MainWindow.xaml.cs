@@ -59,10 +59,12 @@ namespace MyFirstWPFApplication
         }
         private void Board1Selector_Click(object sender, RoutedEventArgs e)
         {
-            BoardSel.Content = "Board 1";
-            // Client = new UdpClient();
+            BoardSel.Content = "Stepper board";
             localEp = new IPEndPoint(IPAddress.Parse("192.168.1.123"), 69);
             SendMessage.Visibility =  Visibility.Visible;
+
+            Scroller.Content += "Target: " + localEp + Environment.NewLine;
+            Scroller.ScrollToBottom();
         }
         private void Board2Selector_Click(object sender, RoutedEventArgs e)
         {
