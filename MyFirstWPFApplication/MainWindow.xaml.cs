@@ -24,8 +24,8 @@ namespace MyFirstWPFApplication
         {
             public byte addr;
             public byte op1;
-            public byte op2;
-            public int Value;
+            public int op2;
+            public UInt16 Value;
         }
         static byte[] getBytes(UdpPack str)
         {
@@ -66,6 +66,14 @@ namespace MyFirstWPFApplication
 
             Scroller.Content += "Target: " + localEp + Environment.NewLine;
             Scroller.ScrollToBottom();
+
+            Toggles.Visibility = Visibility.Collapsed;
+            NumbRot.Visibility = Visibility.Collapsed;
+            Direction.Visibility = Visibility.Collapsed;
+            Freq.Visibility = Visibility.Collapsed;
+            LED.Visibility = Visibility.Visible;
+            Fork.Visibility = Visibility.Visible;
+            FuncSelect.Visibility = Visibility.Visible;
         }
         private void Board2Selector_Click(object sender, RoutedEventArgs e)
         {
@@ -75,6 +83,16 @@ namespace MyFirstWPFApplication
 
             Scroller.Content += "Target: " + localEp + Environment.NewLine;
             Scroller.ScrollToBottom();
+
+            Toggles.Visibility = Visibility.Collapsed;
+            NumbRot.Visibility = Visibility.Collapsed;
+            Direction.Visibility = Visibility.Collapsed;
+            Freq.Visibility = Visibility.Collapsed;
+            LED.Visibility = Visibility.Visible;
+            Fork.Visibility = Visibility.Visible;
+            FuncSelect.Visibility = Visibility.Visible;
+
+
         }
         private void LED_Click(object sender, RoutedEventArgs e)
         {
@@ -84,6 +102,7 @@ namespace MyFirstWPFApplication
             Freq.Visibility = Visibility.Collapsed;
             Toggles.Visibility = Visibility.Visible;
 
+
             UdpOut.addr = 1;
         }
         private void StepM_Click(object sender, RoutedEventArgs e)
@@ -91,9 +110,9 @@ namespace MyFirstWPFApplication
             FuncSel.Content = "Stepper motor";
             DirectionStep.Content = "Choose a direction";
             Toggles.Visibility = Visibility.Collapsed;
-            NumbRot.Visibility = Visibility.Visible;
+            
             Direction.Visibility = Visibility.Visible;
-            Freq.Visibility = Visibility.Visible;
+            
 
             UdpOut.addr = 2;
         }
@@ -111,11 +130,22 @@ namespace MyFirstWPFApplication
         {
             DirectionStep.Content = "Clockwise";
             UdpOut.op1 = 1;
+            Freq.Visibility = Visibility.Visible;
+            NumbRot.Visibility = Visibility.Visible;
+
+        }
+        private void GoZero_Click(object sender, RoutedEventArgs e)
+        {
+            UdpOut.op1 = 2;
+            Freq.Visibility = Visibility.Collapsed;
+            NumbRot.Visibility = Visibility.Collapsed;
         }
         private void StepB_Click(object sender, RoutedEventArgs e)
         {
             DirectionStep.Content = "Counter Clockwise";
             UdpOut.op1 = 0;
+            Freq.Visibility = Visibility.Visible;
+            NumbRot.Visibility = Visibility.Visible;
         }
         private async void  Send_Click(object sender, RoutedEventArgs e)
         {
@@ -166,12 +196,12 @@ namespace MyFirstWPFApplication
         }
         private void slRotations_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            UdpOut.op2 = (byte)slRotations.Value;
+            UdpOut.op2 = (int)slRotations.Value;
            // Debug.WriteLine(hej);
         }
         private void slFreq_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            UdpOut.Value = (int)SlFreq.Value;
+            UdpOut.Value = (UInt16)SlFreq.Value;
         }
         private void slToggle_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {

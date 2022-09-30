@@ -44,7 +44,7 @@
                     Cursor="Hand"/>
         </StackPanel>
 
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="1" Grid.Row="0" Width="150">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="1" Grid.Row="0" Width="150"  x:Name="FuncSelect" Visibility="Collapsed">
             <Label HorizontalAlignment="Center" 
                    VerticalAlignment="Center" 
                    x:Name="FuncSel" 
@@ -90,6 +90,12 @@
                     Height="28" Width="150" 
                     Click="StepB_Click" 
                     Cursor="Hand"/>
+            <Button x:Name = "GoZero"  
+                    Content="Go to zero" 
+                    HorizontalAlignment="Center"  
+                    Height="28" Width="150" 
+                    Click="GoZero_Click" 
+                    Cursor="Hand"/>
         </StackPanel>
 
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="2" Grid.Row="0" Visibility="Collapsed" x:Name="Toggles">
@@ -112,9 +118,9 @@
             <Label HorizontalAlignment="Center" 
                    VerticalAlignment="Center" 
                    x:Name="Rotations" 
-                   >Rotations
+                   >Degrees
             </Label>
-            <Slider Maximum="255" 
+            <Slider Maximum="60000" 
                     TickPlacement="BottomRight" 
                     TickFrequency="1" Width="140" 
                     IsSnapToTickEnabled="True"
@@ -127,12 +133,12 @@
             <Label HorizontalAlignment="Center" 
                    VerticalAlignment="Center" 
                    x:Name="FreqSel" 
-                   >Freq
+                   >RPM
             </Label>
             <Slider Minimum="1"
-                    Maximum="60000" 
+                    Maximum="10000" 
                     TickPlacement="BottomRight" 
-                    TickFrequency="100" 
+                    TickFrequency="10" 
                     Width="140" 
                     IsSnapToTickEnabled="True"
                     Name="SlFreq" ValueChanged="slFreq_ValueChanged"
