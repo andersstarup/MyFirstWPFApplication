@@ -146,6 +146,7 @@ namespace MyFirstWPFApplication
 
         private void GoZero_Click(object sender, RoutedEventArgs e)
         {
+            DirectionStep.Content = "Go Zero"; 
             UdpOut.op1 = 2;
             Freq.Visibility = Visibility.Collapsed;
             NumbRot.Visibility = Visibility.Collapsed;
