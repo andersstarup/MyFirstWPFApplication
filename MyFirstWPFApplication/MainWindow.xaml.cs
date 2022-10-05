@@ -126,6 +126,15 @@ namespace MyFirstWPFApplication
 
             UdpOut.addr = 3;
         }
+
+        private void StepB_Click(object sender, RoutedEventArgs e)
+        {
+            DirectionStep.Content = "Counter Clockwise";
+            UdpOut.op1 = 0;
+            Freq.Visibility = Visibility.Visible;
+            NumbRot.Visibility = Visibility.Visible;
+        }
+
         private void StepF_Click(object sender, RoutedEventArgs e)
         {
             DirectionStep.Content = "Clockwise";
@@ -134,19 +143,14 @@ namespace MyFirstWPFApplication
             NumbRot.Visibility = Visibility.Visible;
 
         }
+
         private void GoZero_Click(object sender, RoutedEventArgs e)
         {
             UdpOut.op1 = 2;
             Freq.Visibility = Visibility.Collapsed;
             NumbRot.Visibility = Visibility.Collapsed;
         }
-        private void StepB_Click(object sender, RoutedEventArgs e)
-        {
-            DirectionStep.Content = "Counter Clockwise";
-            UdpOut.op1 = 0;
-            Freq.Visibility = Visibility.Visible;
-            NumbRot.Visibility = Visibility.Visible;
-        }
+
         private async void  Send_Click(object sender, RoutedEventArgs e)
         {
 
@@ -173,26 +177,10 @@ namespace MyFirstWPFApplication
             }
             catch (Exception err)
             {
-                //Scroller.Foreground = Brushes.Orange;
-                //Console.WriteLine(e.ToString());
                 Scroller.Content += (err.ToString());
                 Scroller.ScrollToBottom();
-                //Scroller.Foreground = new SolidColorBrush(Colors.White);
-
             }
-            /*
-            Client.Connect(localEp);
-            byte[] bytesent = getBytes(UdpOut);
-            Client.Send(bytesent, bytesent.Length);
 
-            data = Client.Receive(ref localEp);
-            string text = Encoding.UTF8.GetString(data);
-
-            Client.Close();
-
-            Scroller.Content += text + Environment.NewLine;
-            Scroller.ScrollToBottom();
-            */
         }
         private void slRotations_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {

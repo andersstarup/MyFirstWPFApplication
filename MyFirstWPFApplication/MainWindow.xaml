@@ -136,7 +136,7 @@
                    >RPM
             </Label>
             <Slider Minimum="1"
-                    Maximum="10000" 
+                    Maximum="1500" 
                     TickPlacement="BottomRight" 
                     TickFrequency="10" 
                     Width="140" 
