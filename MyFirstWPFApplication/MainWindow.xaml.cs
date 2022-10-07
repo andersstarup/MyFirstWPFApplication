@@ -182,20 +182,30 @@ namespace MyFirstWPFApplication
             /////////////////////////////////////////////////////////// SEND AND RECIEVE TIL LED BOARD'
         
            // while (text != "Go To Zero") ;
-            UdpOut.addr = 4;
-            Client1.Connect(localEpLED);
-            bytesent = getBytes(UdpOut);
-            Client1.Send(bytesent, bytesent.Length);
+            UdpClient Client = new UdpClient();
+            try
+            {
+                UdpOut.addr = 4;
+                Client1.Connect(localEpLED);
+                bytesent = getBytes(UdpOut);
+                Client1.Send(bytesent, bytesent.Length);
 
-            dataRecieved = Client1.Receive(ref localEpLED);
-            text = Encoding.UTF8.GetString(dataRecieved);
+                dataRecieved = Client1.Receive(ref localEpLED);
+                text = Encoding.UTF8.GetString(dataRecieved);
 
-            Client.Close();
+                Client.Close();
 
 
-            Scroller.Content += text + Environment.NewLine;
+                Scroller.Content += text + Environment.NewLine;
 
-            Scroller.ScrollToBottom();
+                Scroller.ScrollToBottom();
+            }
+            catch (Exception err)
+            {
+                Scroller.Content += (err.ToString());
+                Scroller.ScrollToBottom();
+            }
+
             ///////////////////////////////////////////////////////////
 
             /////////////////////////////////////////////////////////// SEND AND RECIEVE TIL STEP BOARD
