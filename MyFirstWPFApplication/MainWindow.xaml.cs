@@ -148,7 +148,7 @@ namespace MyFirstWPFApplication
             UdpOut.addr = 3;
         }
 
-        private async void Com_test_click(object sender, RoutedEventArgs e)
+        private void Com_test_click(object sender, RoutedEventArgs e)
         {
             FuncSel.Content = "Com Test"; 
            
@@ -162,13 +162,13 @@ namespace MyFirstWPFApplication
             byte[] bytesent = getBytes(UdpOut);
             Client.Send(bytesent, bytesent.Length);
 
-            var dataRecieved = await Client.ReceiveAsync();
-            string text = Encoding.UTF8.GetString(dataRecieved.Buffer);
+            var dataRecieved = Client.Receive(ref localEpSTEP);
+            string text = Encoding.UTF8.GetString(dataRecieved);
 
             Client.Close();
 
 
-            Scroller.Content += "Message recieved from " + dataRecieved.RemoteEndPoint + ": " + text + Environment.NewLine;
+            Scroller.Content += text + Environment.NewLine;
 
             Scroller.ScrollToBottom();
             ///////////////////////////////////////////////////////////
@@ -179,13 +179,13 @@ namespace MyFirstWPFApplication
             bytesent = getBytes(UdpOut);
             Client.Send(bytesent, bytesent.Length);
 
-            dataRecieved = await Client.ReceiveAsync();
-            text = Encoding.UTF8.GetString(dataRecieved.Buffer);
+            dataRecieved = Client.Receive(ref localEpLED);
+            text = Encoding.UTF8.GetString(dataRecieved);
 
             Client.Close();
 
 
-            Scroller.Content += "Message recieved from " + dataRecieved.RemoteEndPoint + ": " + text + Environment.NewLine;
+            Scroller.Content += text + Environment.NewLine;
 
             Scroller.ScrollToBottom();
             ///////////////////////////////////////////////////////////
@@ -195,13 +195,13 @@ namespace MyFirstWPFApplication
             bytesent = getBytes(UdpOut);
             Client.Send(bytesent, bytesent.Length);
 
-            dataRecieved = await Client.ReceiveAsync();
-            text = Encoding.UTF8.GetString(dataRecieved.Buffer);
+            dataRecieved = Client.Receive(ref localEpSTEP);
+            text = Encoding.UTF8.GetString(dataRecieved);
 
             Client.Close();
 
 
-            Scroller.Content += "Message recieved from " + dataRecieved.RemoteEndPoint + ": " + text + Environment.NewLine;
+            Scroller.Content += text + Environment.NewLine;
 
             Scroller.ScrollToBottom();
             ///////////////////////////////////////////////////////////
