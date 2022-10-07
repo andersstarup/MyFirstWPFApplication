@@ -51,7 +51,9 @@ namespace MyFirstWPFApplication
         UdpPack UdpOut = new UdpPack();
 
         UdpClient Client = new UdpClient();
-
+        UdpClient Client1 = new UdpClient();
+        UdpClient Client2 = new UdpClient();
+        
         IPEndPoint localEp;
         IPEndPoint localEpSTEP;
         IPEndPoint localEpLED;
@@ -155,42 +157,13 @@ namespace MyFirstWPFApplication
             localEpSTEP  = new IPEndPoint(IPAddress.Parse("192.168.1.123"), 70);
             localEpLED = new IPEndPoint(IPAddress.Parse("192.168.1.124"), 69);
 
+            string text;
+            var dataRecieved = Client1.Receive(ref localEpLED);
+            byte[] bytesent;
+
             /////////////////////////////////////////////////////////// SEND AND RECIEVE TIL STEP BOARD
-            UdpOut.addr = 2;
+        /*    UdpOut.addr = 2;
             UdpOut.op1 = 2;
-            Client.Connect(localEpSTEP);
-            byte[] bytesent = getBytes(UdpOut);
-            Client.Send(bytesent, bytesent.Length);
-
-            var dataRecieved = Client.Receive(ref localEpSTEP);
-            string text = Encoding.UTF8.GetString(dataRecieved);
-
-            Client.Close();
-
-
-            Scroller.Content += text + Environment.NewLine;
-
-            Scroller.ScrollToBottom();
-            ///////////////////////////////////////////////////////////
-
-            /////////////////////////////////////////////////////////// SEND AND RECIEVE TIL LED BOARD
-            UdpOut.addr = 4;
-            Client.Connect(localEpLED);
-            bytesent = getBytes(UdpOut);
-            Client.Send(bytesent, bytesent.Length);
-
-            dataRecieved = Client.Receive(ref localEpLED);
-            text = Encoding.UTF8.GetString(dataRecieved);
-
-            Client.Close();
-
-
-            Scroller.Content += text + Environment.NewLine;
-
-            Scroller.ScrollToBottom();
-            ///////////////////////////////////////////////////////////
-
-            /////////////////////////////////////////////////////////// SEND AND RECIEVE TIL STEP BOARD
             Client.Connect(localEpSTEP);
             bytesent = getBytes(UdpOut);
             Client.Send(bytesent, bytesent.Length);
@@ -200,10 +173,49 @@ namespace MyFirstWPFApplication
 
             Client.Close();
 
+            Scroller.Content += text + Environment.NewLine;
+
+            Scroller.ScrollToBottom();
+        */
+            ///////////////////////////////////////////////////////////
+
+            /////////////////////////////////////////////////////////// SEND AND RECIEVE TIL LED BOARD'
+        
+           // while (text != "Go To Zero") ;
+            UdpOut.addr = 4;
+            Client1.Connect(localEpLED);
+            bytesent = getBytes(UdpOut);
+            Client1.Send(bytesent, bytesent.Length);
+
+            dataRecieved = Client1.Receive(ref localEpLED);
+            text = Encoding.UTF8.GetString(dataRecieved);
+
+            Client.Close();
+
 
             Scroller.Content += text + Environment.NewLine;
 
             Scroller.ScrollToBottom();
+            ///////////////////////////////////////////////////////////
+
+            /////////////////////////////////////////////////////////// SEND AND RECIEVE TIL STEP BOARD
+            ///
+        /*
+            while (text != "Har fået int") ;
+            Client2.Connect(localEpSTEP);
+            bytesent = getBytes(UdpOut);
+            Client2.Send(bytesent, bytesent.Length);
+
+            dataRecieved = Client2.Receive(ref localEpSTEP);
+            text = Encoding.UTF8.GetString(dataRecieved);
+
+            Client2.Close();
+
+
+            Scroller.Content += text + Environment.NewLine;
+
+            Scroller.ScrollToBottom();
+        */
             ///////////////////////////////////////////////////////////
         }
 
