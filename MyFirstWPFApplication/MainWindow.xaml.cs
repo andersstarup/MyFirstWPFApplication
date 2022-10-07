@@ -182,7 +182,7 @@ namespace MyFirstWPFApplication
             /////////////////////////////////////////////////////////// SEND AND RECIEVE TIL LED BOARD'
         
            // while (text != "Go To Zero") ;
-            UdpClient Client = new UdpClient();
+            UdpClient Client1 = new UdpClient();
             try
             {
                 UdpOut.addr = 4;
@@ -193,7 +193,7 @@ namespace MyFirstWPFApplication
                 dataRecieved = Client1.Receive(ref localEpLED);
                 text = Encoding.UTF8.GetString(dataRecieved);
 
-                Client.Close();
+                Client1.Close();
 
 
                 Scroller.Content += text + Environment.NewLine;
