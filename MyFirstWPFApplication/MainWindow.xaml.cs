@@ -19,8 +19,9 @@ namespace MyFirstWPFApplication
 {
     public partial class MainWindow : Window
     {
+        int result;
         [StructLayout(LayoutKind.Sequential, Pack = 4)] // creates the least padding, due to the program now does the most efficient allignment
-
+        
         struct UdpPack
         {
             public byte addr;
@@ -152,36 +153,48 @@ namespace MyFirstWPFApplication
 
         private void Com_test_click(object sender, RoutedEventArgs e)
         {
+            
             FuncSel.Content = "Com Test"; 
            
             localEpSTEP  = new IPEndPoint(IPAddress.Parse("192.168.1.123"), 70);
             localEpLED = new IPEndPoint(IPAddress.Parse("192.168.1.124"), 69);
 
             string text;
-            var dataRecieved = Client1.Receive(ref localEpLED);
+            //fvar dataRecieved = localEpLED;
             byte[] bytesent;
 
             /////////////////////////////////////////////////////////// SEND AND RECIEVE TIL STEP BOARD
-        /*    UdpOut.addr = 2;
+            UdpOut.addr = 2;
             UdpOut.op1 = 2;
-            Client.Connect(localEpSTEP);
-            bytesent = getBytes(UdpOut);
-            Client.Send(bytesent, bytesent.Length);
 
-            dataRecieved = Client.Receive(ref localEpSTEP);
-            text = Encoding.UTF8.GetString(dataRecieved);
+            UdpClient Client = new UdpClient();
+            try
+            {
+                
+                Client.Connect(localEpSTEP);
+                bytesent = getBytes(UdpOut);
+                Client.Send(bytesent, bytesent.Length);
 
-            Client.Close();
+                var dataRecieved = Client.Receive(ref localEpSTEP);
+                text = Encoding.UTF8.GetString(dataRecieved);
 
-            Scroller.Content += text + Environment.NewLine;
+                Client.Close();
 
-            Scroller.ScrollToBottom();
-        */
+                Scroller.Content += text + Environment.NewLine;
+
+                Scroller.ScrollToBottom();
+            }
+            catch (Exception err)
+            {
+                Scroller.Content += (err.ToString());
+                Scroller.ScrollToBottom();
+            }
+            
             ///////////////////////////////////////////////////////////
 
             /////////////////////////////////////////////////////////// SEND AND RECIEVE TIL LED BOARD'
-        
-           // while (text != "Go To Zero") ;
+
+            // while (text != "Go To Zero") ;
             UdpClient Client1 = new UdpClient();
             try
             {
@@ -190,7 +203,8 @@ namespace MyFirstWPFApplication
                 bytesent = getBytes(UdpOut);
                 Client1.Send(bytesent, bytesent.Length);
 
-                dataRecieved = Client1.Receive(ref localEpLED);
+                var dataRecieved = Client1.Receive(ref localEpLED);
+                result = Environment.TickCount;
                 text = Encoding.UTF8.GetString(dataRecieved);
 
                 Client1.Close();
@@ -210,22 +224,31 @@ namespace MyFirstWPFApplication
 
             /////////////////////////////////////////////////////////// SEND AND RECIEVE TIL STEP BOARD
             ///
-        /*
-            while (text != "Har fået int") ;
-            Client2.Connect(localEpSTEP);
-            bytesent = getBytes(UdpOut);
-            Client2.Send(bytesent, bytesent.Length);
+          UdpClient Client2 = new UdpClient();
+            try
+            {
+               // while (text != "Har fået int") ;
+                Client2.Connect(localEpSTEP);
+                bytesent = getBytes(UdpOut);
+                Client2.Send(bytesent, bytesent.Length);
+                result = Environment.TickCount & Int32.MaxValue;
 
-            dataRecieved = Client2.Receive(ref localEpSTEP);
-            text = Encoding.UTF8.GetString(dataRecieved);
+                var dataRecieved = Client2.Receive(ref localEpSTEP);
+                text = Encoding.UTF8.GetString(dataRecieved);
 
-            Client2.Close();
+                Client2.Close();
 
 
-            Scroller.Content += text + Environment.NewLine;
+                Scroller.Content += text + Environment.NewLine;
 
-            Scroller.ScrollToBottom();
-        */
+                Scroller.ScrollToBottom();
+            }
+            catch (Exception err)
+            {
+                Scroller.Content += (err.ToString());
+                Scroller.ScrollToBottom();
+            }
+
             ///////////////////////////////////////////////////////////
         }
 
