@@ -24,7 +24,6 @@ namespace MyFirstWPFApplication
 
     public partial class MainWindow : Window
     {
-
         [StructLayout(LayoutKind.Sequential, Pack = 4)] // creates the least padding, due to the program now does the most efficient allignment
         struct UdpPack
         {
@@ -54,61 +53,35 @@ namespace MyFirstWPFApplication
         }
 
         UdpPack UdpOut = new UdpPack();
-        //  UdpClient Client = new UdpClient();
-        //String Data = "";
-        // IPEndPoint clientEndPoint = new IPEndPoint(IPAddress.Parse("0.0.0.0"), 0);
 
-        // IPEndPoint clientEndPoint = new IPEndPoint(IPAddress.Any, 70);
+        UdpClient udpListener = new UdpClient(73);
+        IPEndPoint ListenerEP = new IPEndPoint(IPAddress.Any, 73);
+        //UdpClient UDPout = new UdpClient();
+        IPEndPoint UDPoutEP = new IPEndPoint(IPAddress.Parse("192.168.1.0"), 72);
 
-        UdpClient udpListener;
-        IPEndPoint ListenerEP;
-        UdpClient UDPout = new UdpClient(70);
-        IPEndPoint UDPoutEP = new IPEndPoint(IPAddress.Parse("192.168.1.0"), 70);
 
-        void start()
+        async Task listen()
         {
-            //ListenerEP = new IPEndPoint(IPAddress.Any, 71);
-            udpListener = new UdpClient(71);
-            
-            udpListener.BeginReceive(UDPReceiveCallback, null);
+            while (true)
+            {
+                var dataRecieved = await udpListener.ReceiveAsync();
+                string text = Encoding.UTF8.GetString(dataRecieved.Buffer);
+
+                Scroller.Content += "Message recieved from " + dataRecieved.RemoteEndPoint + ": " + text + Environment.NewLine;
+            }
         }
+
 
         public MainWindow()
         {
             InitializeComponent();
-            start();
-            //Scroller.Content += "hej\n";
-        }
-
-        void UDPReceiveCallback(IAsyncResult result)
-        {
-
-            try
-            {
-                byte[] data = udpListener.EndReceive(result, ref ListenerEP);
-                udpListener.BeginReceive(UDPReceiveCallback, null);
-                string text1 = Encoding.UTF8.GetString(data);
-
-                this.Dispatcher.Invoke(() =>
-                {
-                    Scroller.Content += "Message recieved from " + ": " + text1 + Environment.NewLine;
-                    Scroller.Content += "Fuck Dis Shit \n";
-                });
-
-            }
-            catch (Exception exit1)
-            {
-                this.Dispatcher.Invoke(() =>
-                {
-                    Scroller.Content += exit1 + Environment.NewLine;
-                });
-            }
+            var t = listen();
         }
 
         private void Board1Selector_Click(object sender, RoutedEventArgs e)
         {
             BoardSel.Content = "Stepper board";
-            UDPoutEP = new IPEndPoint(IPAddress.Parse("192.168.1.123"), 70);
+            UDPoutEP = new IPEndPoint(IPAddress.Parse("192.168.1.123"), 72);
             SendMessage.Visibility =  Visibility.Visible;
 
             Scroller.Content += "Target: " + UDPoutEP + Environment.NewLine;
@@ -121,17 +94,18 @@ namespace MyFirstWPFApplication
             LED.Visibility = Visibility.Visible;
             Fork.Visibility = Visibility.Visible;
             FuncSelect.Visibility = Visibility.Visible;
+            ComTest.Visibility = Visibility.Visible;
 
             //udpListener.BeginReceive(UDPReceiveCallback, null);
 
             //Client.BeginReceive(new AsyncCallback(recv), null);
-             
+
         }
 
         private void Board2Selector_Click(object sender, RoutedEventArgs e)
         {
             BoardSel.Content = "LED Board";
-            UDPoutEP = new IPEndPoint(IPAddress.Parse("192.168.1.124"), 70);
+            UDPoutEP = new IPEndPoint(IPAddress.Parse("192.168.1.124"), 72);
             SendMessage.Visibility = Visibility.Visible;
 
             Scroller.Content += "Target: " + UDPoutEP + Environment.NewLine;
@@ -144,6 +118,7 @@ namespace MyFirstWPFApplication
             LED.Visibility = Visibility.Visible;
             Fork.Visibility = Visibility.Visible;
             FuncSelect.Visibility = Visibility.Visible;
+            ComTest.Visibility = Visibility.Collapsed;
 
 
         }
@@ -183,6 +158,18 @@ namespace MyFirstWPFApplication
             UdpOut.addr = 3;
         }
 
+        private void ComTest_click(object sender, RoutedEventArgs e)
+        {
+            UdpOut.addr = 4;
+            FuncSel.Content = "Test com";
+            Toggles.Visibility = Visibility.Collapsed;
+            NumbRot.Visibility = Visibility.Collapsed;
+            Direction.Visibility = Visibility.Collapsed;
+            Freq.Visibility = Visibility.Collapsed;
+            BoardSel.Content = "Stepper board";
+            UDPoutEP = new IPEndPoint(IPAddress.Parse("192.168.1.123"), 72);
+        }
+
         private void StepB_Click(object sender, RoutedEventArgs e)
         {
             DirectionStep.Content = "Counter Clockwise";
@@ -210,29 +197,14 @@ namespace MyFirstWPFApplication
 
         private void  Send_Click(object sender, RoutedEventArgs e)
         {
-            //UdpClient Client = new UdpClient(70);
+           // udpListener.EndReceive(AsyncCallback, ListenerEP);
+            using var UDPout = new UdpClient(71);
             try
             {
-
                 UDPout.Connect(UDPoutEP);
                 byte[] bytesent = getBytes(UdpOut);
                 UDPout.Send(bytesent, bytesent.Length);
                 UDPout.Close();
-
-                //var dataRecieved = await Client.ReceiveAsync();
-                //string text = Encoding.UTF8.GetString(dataRecieved.Buffer);
-
-                // udpListener.Close();
-
-                //Scroller.Content += "Message recieved from " + dataRecieved.RemoteEndPoint + ": " + text + Environment.NewLine;
-
-                //dataRecieved.RemoteEndPoint
-
-                //Scroller.Content += "Message recieved from " + clientEndPoint + ": " + text + Environment.NewLine;
-                //Scroller.ScrollToBottom();
-                //start();
-                
-               
             }
             catch (Exception err)
             {
@@ -263,6 +235,5 @@ namespace MyFirstWPFApplication
             Scroller.Content = "";
             Scroller.ScrollToBottom();
         }
-
     }  
 }

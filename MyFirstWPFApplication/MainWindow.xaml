@@ -44,7 +44,7 @@
                     Cursor="Hand"/>
         </StackPanel>
 
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="1" Grid.Row="0" Width="150"  x:Name="FuncSelect" Visibility="Collapsed">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="1" Grid.Row="0" Width="150"  x:Name="FuncSelect" Visibility="collapsed">
             <Label HorizontalAlignment="Center" 
                    VerticalAlignment="Center" 
                    x:Name="FuncSel" 
@@ -69,6 +69,13 @@
                     VerticalAlignment="Top" 
                     Height="28" Width="150" 
                     Click="Fork_click" 
+                    Cursor="Hand"/>
+		    <Button x:Name = "ComTest" 
+                    Content="Test com between board" 
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Top" 
+                    Height="28" Width="150" 
+                    Click="ComTest_click" 
                     Cursor="Hand"/>
         </StackPanel>
 
