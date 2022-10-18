@@ -17,11 +17,10 @@ using System.Threading;
 using System.Net.Security;
 using System.Windows.Markup;
 using System.Xml.Linq;
+using 
 
 namespace MyFirstWPFApplication
 {
-  
-
     public partial class MainWindow : Window
     {
         [StructLayout(LayoutKind.Sequential, Pack = 4)] // creates the least padding, due to the program now does the most efficient allignment
@@ -71,7 +70,6 @@ namespace MyFirstWPFApplication
             }
         }
 
-
         public MainWindow()
         {
             InitializeComponent();
@@ -95,17 +93,12 @@ namespace MyFirstWPFApplication
             Fork.Visibility = Visibility.Visible;
             FuncSelect.Visibility = Visibility.Visible;
             ComTest.Visibility = Visibility.Visible;
-
-            //udpListener.BeginReceive(UDPReceiveCallback, null);
-
-            //Client.BeginReceive(new AsyncCallback(recv), null);
-
         }
 
         private void Board2Selector_Click(object sender, RoutedEventArgs e)
         {
             BoardSel.Content = "LED Board";
-            UDPoutEP = new IPEndPoint(IPAddress.Parse("192.168.1.124"), 72);
+            UDPoutEP = new IPEndPoint(IPAddress.Parse("192.168.1.255"), 72);
             SendMessage.Visibility = Visibility.Visible;
 
             Scroller.Content += "Target: " + UDPoutEP + Environment.NewLine;
@@ -119,8 +112,6 @@ namespace MyFirstWPFApplication
             Fork.Visibility = Visibility.Visible;
             FuncSelect.Visibility = Visibility.Visible;
             ComTest.Visibility = Visibility.Collapsed;
-
-
         }
 
         private void LED_Click(object sender, RoutedEventArgs e)
@@ -130,7 +121,6 @@ namespace MyFirstWPFApplication
             NumbRot.Visibility = Visibility.Collapsed;
             Freq.Visibility = Visibility.Collapsed;
             Toggles.Visibility = Visibility.Visible;
-
 
             UdpOut.addr = 1;
         }
@@ -143,7 +133,6 @@ namespace MyFirstWPFApplication
             
             Direction.Visibility = Visibility.Visible;
             
-
             UdpOut.addr = 2;
         }
 
@@ -184,7 +173,6 @@ namespace MyFirstWPFApplication
             UdpOut.op1 = 1;
             Freq.Visibility = Visibility.Visible;
             NumbRot.Visibility = Visibility.Visible;
-
         }
 
         private void GoZero_Click(object sender, RoutedEventArgs e)
@@ -217,7 +205,6 @@ namespace MyFirstWPFApplication
         private void slRotations_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             UdpOut.op2 = (int)slRotations.Value;
-           // Debug.WriteLine(hej);
         }
 
         private void slFreq_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
