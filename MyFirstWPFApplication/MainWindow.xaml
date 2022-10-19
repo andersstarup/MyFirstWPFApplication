@@ -27,21 +27,37 @@
                    VerticalAlignment="Center" 
                    x:Name="BoardSel" 
                   
-                   >Select a board
+                   Content="Press &quot;Start&quot; when ready"/>
+            <Label 
+                   HorizontalAlignment="Center" 
+                   VerticalAlignment="Center" 
+                   x:Name="Waiting" 
+                    Visibility="Collapsed"
+                  
+                   >Waiting for response...
             </Label>
+            <Button x:Name = "StartSeq"  
+                    Content="Start" 
+                    HorizontalAlignment="Center"  
+                    Height="28" Width="150" 
+                    Click="StartSeq_Click" 
+                    Cursor="Hand"
+                    Visibility="Visible"/>
             <Button x:Name = "Board1Selector"  
                     Content="Step Board" 
                     HorizontalAlignment="Center"  
                     Height="28" Width="150" 
                     Click="Board1Selector_Click" 
-                    Cursor="Hand"/>
+                    Cursor="Hand"
+                    Visibility="Collapsed"/>
             <Button x:Name = "Board2Selector" 
                     Content="LED Board" 
                     HorizontalAlignment="Center" 
                     VerticalAlignment="Top" 
                     Height="28" Width="150" 
                     Click="Board2Selector_Click" 
-                    Cursor="Hand"/>
+                    Cursor="Hand"
+                    Visibility="Collapsed"/>
         </StackPanel>
 
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="1" Grid.Row="0" Width="150"  x:Name="FuncSelect" Visibility="collapsed">

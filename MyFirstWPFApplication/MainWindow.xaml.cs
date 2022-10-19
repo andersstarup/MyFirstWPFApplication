@@ -69,7 +69,7 @@ namespace MyFirstWPFApplication
                 var dataRecieved = await udpListener.ReceiveAsync();
                 string text = Encoding.UTF8.GetString(dataRecieved.Buffer);
 
-                Scroller.Content += "Message recieved from " + dataRecieved.RemoteEndPoint + ": " + text + Environment.NewLine;
+                Scroller.Content += "Message from " + dataRecieved.RemoteEndPoint + ": " + text + Environment.NewLine;
             }
         }
 
@@ -116,24 +116,7 @@ namespace MyFirstWPFApplication
             FuncSelect.Visibility = Visibility.Visible;
             ComTest.Visibility = Visibility.Collapsed;
 
-            /* 
-            var Person = new Personer()
-            {
-                Name = "Anders",
-                age = 25
-            };
 
-            var Person2 = new Personer();
-
-            var Perso1 = JsonConvert.SerializeObject(Person);
-
-            Person2.age = 25;
-
-            var Perso2 = JsonConvert.SerializeObject(Person2);
-
-
-            Scroller.Content += Perso2 + Environment.NewLine;
-            Scroller.ScrollToBottom();*/
         }
 
         private void LED_Click(object sender, RoutedEventArgs e)
@@ -212,7 +195,6 @@ namespace MyFirstWPFApplication
 
         private void  Send_Click(object sender, RoutedEventArgs e)
         {
-           // udpListener.EndReceive(AsyncCallback, ListenerEP);
             using var UDPout = new UdpClient(71);
             try
             {
@@ -226,7 +208,6 @@ namespace MyFirstWPFApplication
                 Scroller.Content += (err.ToString());
                 Scroller.ScrollToBottom();
             }
-            
         }
 
         private void slRotations_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -249,7 +230,40 @@ namespace MyFirstWPFApplication
             Scroller.Content = "";
             Scroller.ScrollToBottom();
         }
-    }  
+
+        private void StartSeq_Click(object sender, RoutedEventArgs e)
+        {
+            
+            var Start1 = new StartUP()
+            {
+                hej = "Hej, jeg er serveren. Venligst fortæl hvad du har med dig",
+                Server = true
+            };
+            Encoding.UTF8.GetString(dataRecieved.Buffer)
+            var Start = Encoding.UTF8.Ge
+                JsonConvert.SerializeObject(Person2);
+
+            StartSeq.Visibility = Visibility.Collapsed;
+            Waiting.Visibility = Visibility.Visible;
+
+            UDPoutEP = new IPEndPoint(IPAddress.Parse("192.168.1.255"), 72);
+            using var UDPout = new UdpClient(71);
+            try
+            {
+                UDPout.Connect(UDPoutEP);
+                byte[] bytesent = getBytes(UdpOut);
+                UDPout.Send(bytesent, bytesent.Length);
+                UDPout.Close();
+            }
+            catch (Exception err)
+            {
+                Scroller.Content += (err.ToString());
+                Scroller.ScrollToBottom();
+            }
+
+
+        }
+    }
 
     public class Personer
     {
@@ -262,8 +276,29 @@ namespace MyFirstWPFApplication
 
     public class StartUP
     {
-        public bool afjlsa { get; set; }
+        public bool Server { get; set; }
 
         public string hej { get; set; }
     }
+
 }
+
+
+/* 
+var Person = new Personer()
+{
+    Name = "Anders",
+    age = 25
+};
+
+var Person2 = new Personer();
+
+var Perso1 = JsonConvert.SerializeObject(Person);
+
+Person2.age = 25;
+
+var Perso2 = JsonConvert.SerializeObject(Person2);
+
+
+Scroller.Content += Perso2 + Environment.NewLine;
+Scroller.ScrollToBottom();*/
