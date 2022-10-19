@@ -17,12 +17,14 @@ using System.Threading;
 using System.Net.Security;
 using System.Windows.Markup;
 using System.Xml.Linq;
-using 
+using Newtonsoft;
+using Newtonsoft.Json;
 
 namespace MyFirstWPFApplication
 {
     public partial class MainWindow : Window
     {
+
         [StructLayout(LayoutKind.Sequential, Pack = 4)] // creates the least padding, due to the program now does the most efficient allignment
         struct UdpPack
         {
@@ -57,6 +59,7 @@ namespace MyFirstWPFApplication
         IPEndPoint ListenerEP = new IPEndPoint(IPAddress.Any, 73);
         //UdpClient UDPout = new UdpClient();
         IPEndPoint UDPoutEP = new IPEndPoint(IPAddress.Parse("192.168.1.0"), 72);
+        
 
 
         async Task listen()
@@ -98,7 +101,7 @@ namespace MyFirstWPFApplication
         private void Board2Selector_Click(object sender, RoutedEventArgs e)
         {
             BoardSel.Content = "LED Board";
-            UDPoutEP = new IPEndPoint(IPAddress.Parse("192.168.1.255"), 72);
+            UDPoutEP = new IPEndPoint(IPAddress.Parse("192.168.1.124"), 72);
             SendMessage.Visibility = Visibility.Visible;
 
             Scroller.Content += "Target: " + UDPoutEP + Environment.NewLine;
@@ -112,6 +115,25 @@ namespace MyFirstWPFApplication
             Fork.Visibility = Visibility.Visible;
             FuncSelect.Visibility = Visibility.Visible;
             ComTest.Visibility = Visibility.Collapsed;
+
+            /* 
+            var Person = new Personer()
+            {
+                Name = "Anders",
+                age = 25
+            };
+
+            var Person2 = new Personer();
+
+            var Perso1 = JsonConvert.SerializeObject(Person);
+
+            Person2.age = 25;
+
+            var Perso2 = JsonConvert.SerializeObject(Person2);
+
+
+            Scroller.Content += Perso2 + Environment.NewLine;
+            Scroller.ScrollToBottom();*/
         }
 
         private void LED_Click(object sender, RoutedEventArgs e)
@@ -145,6 +167,11 @@ namespace MyFirstWPFApplication
             Freq.Visibility = Visibility.Collapsed;
 
             UdpOut.addr = 3;
+
+            UDPoutEP = new IPEndPoint(IPAddress.Parse("192.168.1.255"), 72);
+
+            Scroller.Content += "Target: " + UDPoutEP + Environment.NewLine;
+            Scroller.ScrollToBottom();
         }
 
         private void ComTest_click(object sender, RoutedEventArgs e)
@@ -223,4 +250,20 @@ namespace MyFirstWPFApplication
             Scroller.ScrollToBottom();
         }
     }  
+
+    public class Personer
+    {
+        public string Name { get; set; }
+
+        public int age { get; set; }
+
+        public string hej { get; set; }
+    }
+
+    public class StartUP
+    {
+        public bool afjlsa { get; set; }
+
+        public string hej { get; set; }
+    }
 }
