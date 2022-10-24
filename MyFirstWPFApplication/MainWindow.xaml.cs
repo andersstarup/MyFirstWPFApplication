@@ -19,6 +19,7 @@ using System.Windows.Markup;
 using System.Xml.Linq;
 using Newtonsoft;
 using Newtonsoft.Json;
+using System.Collections;
 
 namespace MyFirstWPFApplication
 {
@@ -59,7 +60,11 @@ namespace MyFirstWPFApplication
         IPEndPoint ListenerEP = new IPEndPoint(IPAddress.Any, 73);
         //UdpClient UDPout = new UdpClient();
         IPEndPoint UDPoutEP = new IPEndPoint(IPAddress.Parse("192.168.1.0"), 72);
-        
+        int i = 0;
+        int?[] B1CmdP;
+        int?[] B2CmdP;
+
+
 
 
         async Task listen()
@@ -68,8 +73,49 @@ namespace MyFirstWPFApplication
             {
                 var dataRecieved = await udpListener.ReceiveAsync();
                 string text = Encoding.UTF8.GetString(dataRecieved.Buffer);
-
                 Scroller.Content += "Message from " + dataRecieved.RemoteEndPoint + ": " + text + Environment.NewLine;
+                
+                if (StartMsg = True) { // skal rettes så det passer med Mathias 
+                    i++;
+                    Waiting.Visibility = Visibility.Collapsed;
+                    BoardSel.Content = "Choose a board:";
+                    if (i == 1) { 
+                        if (text == "cmd1") // skal rettes så det passer med Mathias
+                        {
+                            Board1Selector.Content = "Board" + i;
+                            B1CmdP[1] = 1;
+                        }
+                        if (text == "cmd2") // skal rettes så det passer med Mathias
+                        {
+                            B1CmdP[2] = 1;
+                        }
+                        if (text == "cmd3") // skal rettes så det passer med Mathias
+                        {
+                            B1CmdP[3] = 1;
+                        }
+                        Board1Selector.Visibility = Visibility.Visible;
+                    }
+
+                    if (i == 2)
+                    {
+                        if (text == "cmd1") // skal rettes så det passer med Mathias
+                        {
+                            Board2Selector.Content = "Board" + i;
+                            B2CmdP[1] = 1;
+                        }
+                        if (text == "cmd2") // skal rettes så det passer med Mathias
+                        {
+                            B2CmdP[2] = 1;
+                        }
+                        if (text == "cmd3") // skal rettes så det passer med Mathias
+                        {
+                            B2CmdP[3] = 1;
+                        }
+                        Board2Selector.Visibility = Visibility.Visible;
+                    }
+                   // Board1Selector.Visibility = Visibility.Visible;
+                   // Board2Selector.Visibility = Visibility.Visible;
+                }
             }
         }
 
@@ -92,10 +138,28 @@ namespace MyFirstWPFApplication
             NumbRot.Visibility = Visibility.Collapsed;
             Direction.Visibility = Visibility.Collapsed;
             Freq.Visibility = Visibility.Collapsed;
+
+            /*
             LED.Visibility = Visibility.Visible;
             Fork.Visibility = Visibility.Visible;
-            FuncSelect.Visibility = Visibility.Visible;
             ComTest.Visibility = Visibility.Visible;
+            */
+            FuncSelect.Visibility = Visibility.Visible;
+            
+            
+            if (B1CmdP[1] == 1)
+            {
+                LED.Visibility = Visibility.Visible;
+            }
+            if (B1CmdP[2] == 1)
+            {
+                Fork.Visibility = Visibility.Visible;
+            }
+            if (B1CmdP[3] == 1)
+            {
+                StepM.Visibility = Visibility.Visible;
+            }
+
         }
 
         private void Board2Selector_Click(object sender, RoutedEventArgs e)
@@ -111,12 +175,27 @@ namespace MyFirstWPFApplication
             NumbRot.Visibility = Visibility.Collapsed;
             Direction.Visibility = Visibility.Collapsed;
             Freq.Visibility = Visibility.Collapsed;
-            LED.Visibility = Visibility.Visible;
-            Fork.Visibility = Visibility.Visible;
-            FuncSelect.Visibility = Visibility.Visible;
             ComTest.Visibility = Visibility.Collapsed;
 
+            /*
+            LED.Visibility = Visibility.Visible;
+            Fork.Visibility = Visibility.Visible; 
+            */
+            FuncSelect.Visibility = Visibility.Visible;
+            
 
+            if (B2CmdP[1] == 1)
+            {
+                LED.Visibility = Visibility.Visible;
+            }
+            if (B2CmdP[2] == 1)
+            {
+                Fork.Visibility = Visibility.Visible;
+            }
+            if (B2CmdP[3] == 1)
+            {
+                StepM.Visibility = Visibility.Visible;
+            }
         }
 
         private void LED_Click(object sender, RoutedEventArgs e)
@@ -233,15 +312,18 @@ namespace MyFirstWPFApplication
 
         private void StartSeq_Click(object sender, RoutedEventArgs e)
         {
-            
             var Start1 = new StartUP()
             {
                 hej = "Hej, jeg er serveren. Venligst fortæl hvad du har med dig",
                 Server = true
             };
-            Encoding.UTF8.GetString(dataRecieved.Buffer)
-            var Start = Encoding.UTF8.Ge
-                JsonConvert.SerializeObject(Person2);
+            //Encoding.UTF8.GetString(dataRecieved.Buffer);
+            var Start = JsonConvert.SerializeObject(Start1);
+            var StartSeqMsg = Encoding.UTF8.GetBytes(Start);
+            Scroller.Content += Start;
+            Scroller.ScrollToBottom();
+
+            //JsonConvert.SerializeObject(Person2);
 
             StartSeq.Visibility = Visibility.Collapsed;
             Waiting.Visibility = Visibility.Visible;
@@ -251,8 +333,7 @@ namespace MyFirstWPFApplication
             try
             {
                 UDPout.Connect(UDPoutEP);
-                byte[] bytesent = getBytes(UdpOut);
-                UDPout.Send(bytesent, bytesent.Length);
+                UDPout.Send(StartSeqMsg, StartSeqMsg.Length);
                 UDPout.Close();
             }
             catch (Exception err)
@@ -260,8 +341,6 @@ namespace MyFirstWPFApplication
                 Scroller.Content += (err.ToString());
                 Scroller.ScrollToBottom();
             }
-
-
         }
     }
 
@@ -280,7 +359,6 @@ namespace MyFirstWPFApplication
 
         public string hej { get; set; }
     }
-
 }
 
 
