@@ -65,8 +65,19 @@ namespace MyFirstWPFApplication
         // int?[] B1CmdP;
         // int?[] B2CmdP;
 
-        Rootobject JsonOut = new Rootobject();
-
+        Rootobject JsonOut = new Rootobject()
+        {
+            command = "",
+            deviceID = 0,
+            GoZero = 0,
+            _params = new Params()
+            {
+                RPM = new UInt16(),
+                deg = 0,
+                dir = 0,
+                toggles = 0
+            },
+        };
 
 
 
@@ -376,10 +387,10 @@ namespace MyFirstWPFApplication
 
     public class Rootobject
     {
-        public string command { get; set; }
+        public string? command { get; set; }
         public int deviceID { get; set; }
         public int GoZero { get; set; }
-        public Params _params { get; set; }
+        public Params? _params { get; set; }
     }
 
     public class Params
@@ -394,7 +405,7 @@ namespace MyFirstWPFApplication
     {
         public bool Server { get; set; }
 
-        public string hej { get; set; }
+        public string? hej { get; set; }
     }
 }
 
