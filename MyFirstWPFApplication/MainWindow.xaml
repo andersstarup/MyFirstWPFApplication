@@ -49,7 +49,7 @@
                     Height="28" Width="150" 
                     Click="Board1Selector_Click" 
                     Cursor="Hand"
-                    Visibility="Collapsed"/>
+                    Visibility="Visible"/>
             <Button x:Name = "Board2Selector" 
                     Content="LED Board" 
                     HorizontalAlignment="Center" 
@@ -57,10 +57,10 @@
                     Height="28" Width="150" 
                     Click="Board2Selector_Click" 
                     Cursor="Hand"
-                    Visibility="Collapsed"/>
+                    Visibility="Visible"/>
         </StackPanel>
 
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="1" Grid.Row="0" Width="150"  x:Name="FuncSelect" Visibility="Visible">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="1" Grid.Row="0" Width="150"  x:Name="FuncSelect" Visibility="Collapsed">
             <Label HorizontalAlignment="Center" 
                    VerticalAlignment="Center" 
                    x:Name="FuncSel" 

@@ -20,6 +20,7 @@ using System.Xml.Linq;
 using Newtonsoft;
 using Newtonsoft.Json;
 using System.Collections;
+using System.Security.Cryptography.X509Certificates;
 
 namespace MyFirstWPFApplication
 {
@@ -60,9 +61,11 @@ namespace MyFirstWPFApplication
         IPEndPoint ListenerEP = new IPEndPoint(IPAddress.Any, 73);
         //UdpClient UDPout = new UdpClient();
         IPEndPoint UDPoutEP = new IPEndPoint(IPAddress.Parse("192.168.1.0"), 72);
-        int i = 0;
-        int?[] B1CmdP;
-        int?[] B2CmdP;
+        // int i = 0;
+        // int?[] B1CmdP;
+        // int?[] B2CmdP;
+
+        Rootobject JsonOut = new Rootobject();
 
 
 
@@ -74,12 +77,15 @@ namespace MyFirstWPFApplication
                 var dataRecieved = await udpListener.ReceiveAsync();
                 string text = Encoding.UTF8.GetString(dataRecieved.Buffer);
                 Scroller.Content += "Message from " + dataRecieved.RemoteEndPoint + ": " + text + Environment.NewLine;
-                
-                if (StartMsg = True) { // skal rettes så det passer med Mathias 
+
+                /*
+                if (StartMsg = True)
+                { // skal rettes så det passer med Mathias 
                     i++;
                     Waiting.Visibility = Visibility.Collapsed;
                     BoardSel.Content = "Choose a board:";
-                    if (i == 1) { 
+                    if (i == 1)
+                    {
                         if (text == "cmd1") // skal rettes så det passer med Mathias
                         {
                             Board1Selector.Content = "Board" + i;
@@ -113,9 +119,10 @@ namespace MyFirstWPFApplication
                         }
                         Board2Selector.Visibility = Visibility.Visible;
                     }
-                   // Board1Selector.Visibility = Visibility.Visible;
-                   // Board2Selector.Visibility = Visibility.Visible;
+                    // Board1Selector.Visibility = Visibility.Visible;
+                    // Board2Selector.Visibility = Visibility.Visible;
                 }
+                */
             }
         }
 
@@ -123,13 +130,14 @@ namespace MyFirstWPFApplication
         {
             InitializeComponent();
             var t = listen();
+            //var msgOut = new Rootobject();
         }
 
         private void Board1Selector_Click(object sender, RoutedEventArgs e)
         {
             BoardSel.Content = "Stepper board";
             UDPoutEP = new IPEndPoint(IPAddress.Parse("192.168.1.123"), 72);
-            SendMessage.Visibility =  Visibility.Visible;
+            SendMessage.Visibility = Visibility.Visible;
 
             Scroller.Content += "Target: " + UDPoutEP + Environment.NewLine;
             Scroller.ScrollToBottom();
@@ -147,6 +155,8 @@ namespace MyFirstWPFApplication
             FuncSelect.Visibility = Visibility.Visible;
             
             
+            /*
+
             if (B1CmdP[1] == 1)
             {
                 LED.Visibility = Visibility.Visible;
@@ -159,7 +169,7 @@ namespace MyFirstWPFApplication
             {
                 StepM.Visibility = Visibility.Visible;
             }
-
+            */
         }
 
         private void Board2Selector_Click(object sender, RoutedEventArgs e)
@@ -182,8 +192,8 @@ namespace MyFirstWPFApplication
             Fork.Visibility = Visibility.Visible; 
             */
             FuncSelect.Visibility = Visibility.Visible;
-            
 
+            /*
             if (B2CmdP[1] == 1)
             {
                 LED.Visibility = Visibility.Visible;
@@ -196,6 +206,7 @@ namespace MyFirstWPFApplication
             {
                 StepM.Visibility = Visibility.Visible;
             }
+            */
         }
 
         private void LED_Click(object sender, RoutedEventArgs e)
@@ -206,6 +217,8 @@ namespace MyFirstWPFApplication
             Freq.Visibility = Visibility.Collapsed;
             Toggles.Visibility = Visibility.Visible;
 
+            //var udpMsgO = new Rootobject;
+            JsonOut.command = "LED";
             UdpOut.addr = 1;
         }
 
@@ -214,9 +227,10 @@ namespace MyFirstWPFApplication
             FuncSel.Content = "Stepper motor";
             DirectionStep.Content = "Choose a direction";
             Toggles.Visibility = Visibility.Collapsed;
-            
+
             Direction.Visibility = Visibility.Visible;
-            
+
+            JsonOut.command = "StepM";
             UdpOut.addr = 2;
         }
 
@@ -228,6 +242,7 @@ namespace MyFirstWPFApplication
             Direction.Visibility = Visibility.Collapsed;
             Freq.Visibility = Visibility.Collapsed;
 
+            JsonOut.command = "Fork";
             UdpOut.addr = 3;
 
             UDPoutEP = new IPEndPoint(IPAddress.Parse("192.168.1.255"), 72);
@@ -238,7 +253,9 @@ namespace MyFirstWPFApplication
 
         private void ComTest_click(object sender, RoutedEventArgs e)
         {
+            JsonOut.command = "ComTest";
             UdpOut.addr = 4;
+
             FuncSel.Content = "Test com";
             Toggles.Visibility = Visibility.Collapsed;
             NumbRot.Visibility = Visibility.Collapsed;
@@ -252,6 +269,7 @@ namespace MyFirstWPFApplication
         {
             DirectionStep.Content = "Counter Clockwise";
             UdpOut.op1 = 0;
+            JsonOut._params.dir = 0;
             Freq.Visibility = Visibility.Visible;
             NumbRot.Visibility = Visibility.Visible;
         }
@@ -260,27 +278,36 @@ namespace MyFirstWPFApplication
         {
             DirectionStep.Content = "Clockwise";
             UdpOut.op1 = 1;
+            JsonOut._params.dir = 1;
             Freq.Visibility = Visibility.Visible;
             NumbRot.Visibility = Visibility.Visible;
         }
 
         private void GoZero_Click(object sender, RoutedEventArgs e)
         {
-            DirectionStep.Content = "Go Zero"; 
+            DirectionStep.Content = "Go Zero";
             UdpOut.op1 = 2;
+            JsonOut.GoZero = 1;
             Freq.Visibility = Visibility.Collapsed;
             NumbRot.Visibility = Visibility.Collapsed;
         }
 
-        private void  Send_Click(object sender, RoutedEventArgs e)
+        private void Send_Click(object sender, RoutedEventArgs e)
         {
             using var UDPout = new UdpClient(71);
             try
             {
+                var JsonOutSeri = JsonConvert.SerializeObject(JsonOut);
+                var JsonOutByte = Encoding.UTF8.GetBytes(JsonOutSeri);
+
+
                 UDPout.Connect(UDPoutEP);
                 byte[] bytesent = getBytes(UdpOut);
-                UDPout.Send(bytesent, bytesent.Length);
+                UDPout.Send(JsonOutByte, JsonOutByte.Length);
                 UDPout.Close();
+
+                Scroller.Content += JsonOutSeri + Environment.NewLine;
+                Scroller.ScrollToBottom();
             }
             catch (Exception err)
             {
@@ -292,16 +319,19 @@ namespace MyFirstWPFApplication
         private void slRotations_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             UdpOut.op2 = (int)slRotations.Value;
+            JsonOut._params.dir = (int)slRotations.Value;
         }
 
         private void slFreq_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             UdpOut.Value = (UInt16)SlFreq.Value;
+        //    JsonOut._params.RPM = (UInt16)SlFreq.Value;
         }
 
         private void slToggle_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             UdpOut.op1 = (byte)slToggle.Value;
+            JsonOut._params.toggles = (byte)slToggle.Value;
         }
 
         private void Clear_Click(object sender, RoutedEventArgs e)
@@ -344,13 +374,20 @@ namespace MyFirstWPFApplication
         }
     }
 
-    public class Personer
+    public class Rootobject
     {
-        public string Name { get; set; }
+        public string command { get; set; }
+        public int deviceID { get; set; }
+        public int GoZero { get; set; }
+        public Params _params { get; set; }
+    }
 
-        public int age { get; set; }
-
-        public string hej { get; set; }
+    public class Params
+    {
+        public UInt16 RPM { get; set; }
+        public int deg { get; set; }
+        public int dir { get; set; }
+        public byte toggles { get; set; }
     }
 
     public class StartUP
