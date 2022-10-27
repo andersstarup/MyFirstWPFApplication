@@ -21,11 +21,16 @@ using Newtonsoft;
 using Newtonsoft.Json;
 using System.Collections;
 using System.Security.Cryptography.X509Certificates;
+using System.Windows.Documents;
+using System.Security.Cryptography;
+using System.Text.Json.Serialization;
+using MyFirstWPFApplication.Classes;
 
 namespace MyFirstWPFApplication
 {
     public partial class MainWindow : Window
     {
+
 
         [StructLayout(LayoutKind.Sequential, Pack = 4)] // creates the least padding, due to the program now does the most efficient allignment
         struct UdpPack
@@ -61,7 +66,7 @@ namespace MyFirstWPFApplication
         IPEndPoint ListenerEP = new IPEndPoint(IPAddress.Any, 73);
         //UdpClient UDPout = new UdpClient();
         IPEndPoint UDPoutEP = new IPEndPoint(IPAddress.Parse("192.168.1.0"), 72);
-        // int i = 0;
+        
         // int?[] B1CmdP;
         // int?[] B2CmdP;
 
@@ -80,59 +85,69 @@ namespace MyFirstWPFApplication
         };
 
 
+        // buffer 0] = 0 - Startsbesksed
+        // buffer[1]
+        // buffer[2]
+        // buffer[3]
+        // buffer[4]
+        // buffer[5]
 
+        int boardNr = 0;
+        List<Board> boards = new();
         async Task listen()
         {
             while (true)
             {
                 var dataRecieved = await udpListener.ReceiveAsync();
+                byte[] array = dataRecieved.Buffer;
                 string text = Encoding.UTF8.GetString(dataRecieved.Buffer);
                 Scroller.Content += "Message from " + dataRecieved.RemoteEndPoint + ": " + text + Environment.NewLine;
-
-                /*
-                if (StartMsg = True)
-                { // skal rettes så det passer med Mathias 
-                    i++;
+                
+                if (array[0] == '0')
+                {
                     Waiting.Visibility = Visibility.Collapsed;
-                    BoardSel.Content = "Choose a board:";
-                    if (i == 1)
+                    boardNr ++;
+                    Board board = new Board();
+                    board.B_ID = boardNr;
+                    //boards.First(x => x.B_ID == 2);
+
+                    if (boardNr == 1)
                     {
-                        if (text == "cmd1") // skal rettes så det passer med Mathias
-                        {
-                            Board1Selector.Content = "Board" + i;
-                            B1CmdP[1] = 1;
-                        }
-                        if (text == "cmd2") // skal rettes så det passer med Mathias
-                        {
-                            B1CmdP[2] = 1;
-                        }
-                        if (text == "cmd3") // skal rettes så det passer med Mathias
-                        {
-                            B1CmdP[3] = 1;
-                        }
                         Board1Selector.Visibility = Visibility.Visible;
                     }
-
-                    if (i == 2)
+                    if (boardNr == 2)
                     {
-                        if (text == "cmd1") // skal rettes så det passer med Mathias
-                        {
-                            Board2Selector.Content = "Board" + i;
-                            B2CmdP[1] = 1;
-                        }
-                        if (text == "cmd2") // skal rettes så det passer med Mathias
-                        {
-                            B2CmdP[2] = 1;
-                        }
-                        if (text == "cmd3") // skal rettes så det passer med Mathias
-                        {
-                            B2CmdP[3] = 1;
-                        }
                         Board2Selector.Visibility = Visibility.Visible;
                     }
-                    // Board1Selector.Visibility = Visibility.Visible;
-                    // Board2Selector.Visibility = Visibility.Visible;
+
+                    Scroller.Content += "Found a init message at board nr: " + boardNr + Environment.NewLine;
+                    
+                    if (array[1] == '1')
+                    {
+                        Scroller.Content += "This Board has a LED" + Environment.NewLine;
+                        board.commands.Add("Led");
+                    }
+
+                    if (array[2] == '1')
+                    {
+                        Scroller.Content += "This Board has Stepper motor" + Environment.NewLine;
+                        board.commands.Add("StepM");
+                    }
+
+                    if (array[3] == '1')
+                    {
+                        Scroller.Content += "This Board has Fork sensor" + Environment.NewLine;
+                        board.commands.Add("Fork");
+                    }
+                    boards.Add(board);
                 }
+                
+                /*
+                else if (array[0] == '1')
+                {
+                    Scroller.Content += "Not a init message" + Environment.NewLine;
+                    array[0] = 140;
+                } 
                 */
             }
         }
@@ -146,6 +161,22 @@ namespace MyFirstWPFApplication
 
         private void Board1Selector_Click(object sender, RoutedEventArgs e)
         {
+            var board1 = boards.First(x => x.B_ID == 1);
+            if (board1.commands.Contains("Led"))
+            {
+                LED.Visibility = Visibility.Visible;
+            }
+
+            if (board1.commands.Contains("StepM"))
+            {
+                StepM.Visibility = Visibility.Visible;
+            }
+
+            if (board1.commands.Contains("Fork"))
+            {
+                Fork.Visibility = Visibility.Visible;
+            }
+
             BoardSel.Content = "Stepper board";
             UDPoutEP = new IPEndPoint(IPAddress.Parse("192.168.1.123"), 72);
             SendMessage.Visibility = Visibility.Visible;
@@ -157,34 +188,27 @@ namespace MyFirstWPFApplication
             NumbRot.Visibility = Visibility.Collapsed;
             Direction.Visibility = Visibility.Collapsed;
             Freq.Visibility = Visibility.Collapsed;
-
-            /*
-            LED.Visibility = Visibility.Visible;
-            Fork.Visibility = Visibility.Visible;
-            ComTest.Visibility = Visibility.Visible;
-            */
-            FuncSelect.Visibility = Visibility.Visible;
-            
-            
-            /*
-
-            if (B1CmdP[1] == 1)
-            {
-                LED.Visibility = Visibility.Visible;
-            }
-            if (B1CmdP[2] == 1)
-            {
-                Fork.Visibility = Visibility.Visible;
-            }
-            if (B1CmdP[3] == 1)
-            {
-                StepM.Visibility = Visibility.Visible;
-            }
-            */
         }
 
         private void Board2Selector_Click(object sender, RoutedEventArgs e)
         {
+            var board2 = boards.First(x => x.B_ID == 2);
+            if (board2.commands.Contains("Led"))
+            {
+                LED.Visibility = Visibility.Visible;
+            } else LED.Visibility = Visibility.Collapsed;
+
+            if (board2.commands.Contains("StepM"))
+            {
+                StepM.Visibility = Visibility.Visible;
+            } else StepM.Visibility = Visibility.Collapsed;
+
+            if (board2.commands.Contains("Fork"))
+            {
+                Fork.Visibility = Visibility.Visible;
+            } else Fork.Visibility = Visibility.Collapsed;
+
+
             BoardSel.Content = "LED Board";
             UDPoutEP = new IPEndPoint(IPAddress.Parse("192.168.1.124"), 72);
             SendMessage.Visibility = Visibility.Visible;
@@ -353,6 +377,9 @@ namespace MyFirstWPFApplication
 
         private void StartSeq_Click(object sender, RoutedEventArgs e)
         {
+            StartSeq.Visibility = Visibility.Collapsed;
+            Waiting.Visibility = Visibility.Visible;
+            boardNr = 0;
             var Start1 = new StartUP()
             {
                 hej = "Hej, jeg er serveren. Venligst fortæl hvad du har med dig",
@@ -361,12 +388,12 @@ namespace MyFirstWPFApplication
             //Encoding.UTF8.GetString(dataRecieved.Buffer);
             var Start = JsonConvert.SerializeObject(Start1);
             var StartSeqMsg = Encoding.UTF8.GetBytes(Start);
-            Scroller.Content += Start;
+            Scroller.Content += Start + Environment.NewLine;
             Scroller.ScrollToBottom();
 
             //JsonConvert.SerializeObject(Person2);
 
-            StartSeq.Visibility = Visibility.Collapsed;
+            //StartSeq.Visibility = Visibility.Collapsed;
             Waiting.Visibility = Visibility.Visible;
 
             UDPoutEP = new IPEndPoint(IPAddress.Parse("192.168.1.255"), 72);
@@ -383,29 +410,6 @@ namespace MyFirstWPFApplication
                 Scroller.ScrollToBottom();
             }
         }
-    }
-
-    public class Rootobject
-    {
-        public string? command { get; set; }
-        public int deviceID { get; set; }
-        public int GoZero { get; set; }
-        public Params? _params { get; set; }
-    }
-
-    public class Params
-    {
-        public UInt16 RPM { get; set; }
-        public int deg { get; set; }
-        public int dir { get; set; }
-        public byte toggles { get; set; }
-    }
-
-    public class StartUP
-    {
-        public bool Server { get; set; }
-
-        public string? hej { get; set; }
     }
 }
 
