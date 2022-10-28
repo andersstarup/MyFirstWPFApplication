@@ -43,6 +43,7 @@
                     Click="StartSeq_Click" 
                     Cursor="Hand"
                     Visibility="Visible"/>
+            <!--
             <Button x:Name = "Board1Selector"  
                     Content="Step Board" 
                     HorizontalAlignment="Center"  
@@ -58,6 +59,16 @@
                     Click="Board2Selector_Click" 
                     Cursor="Hand"
                     Visibility="Collapsed"/>
+            -->
+            <ComboBox x:Name="Boards">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding B_Name}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
         </StackPanel>
 
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="1" Grid.Row="0" Width="150"  x:Name="FuncSelect" Visibility="Collapsed">

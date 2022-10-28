@@ -1,30 +1,15 @@
-﻿using System;
-using System.Diagnostics;
+﻿using MyFirstWPFApplication.Classes;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
-using System.Windows;
-using System.Runtime.Intrinsics.Arm;
-using System.Collections.Generic;
-using System.Linq;
-using System.Data;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using static System.Net.Mime.MediaTypeNames;
-using System.Windows.Media;
-using System.Threading;
-using System.Net.Security;
-using System.Windows.Markup;
-using System.Xml.Linq;
-using Newtonsoft;
-using Newtonsoft.Json;
-using System.Collections;
-using System.Security.Cryptography.X509Certificates;
-using System.Windows.Documents;
-using System.Security.Cryptography;
-using System.Text.Json.Serialization;
-using MyFirstWPFApplication.Classes;
 
 namespace MyFirstWPFApplication
 {
@@ -40,7 +25,6 @@ namespace MyFirstWPFApplication
             public int op2;
             public UInt16 Value;
         }
-
         static byte[] getBytes(UdpPack str)
         {
             int size = Marshal.SizeOf(str);
@@ -66,9 +50,6 @@ namespace MyFirstWPFApplication
         IPEndPoint ListenerEP = new IPEndPoint(IPAddress.Any, 73);
         //UdpClient UDPout = new UdpClient();
         IPEndPoint UDPoutEP = new IPEndPoint(IPAddress.Parse("192.168.1.0"), 72);
-        
-        // int?[] B1CmdP;
-        // int?[] B2CmdP;
 
         Rootobject JsonOut = new Rootobject()
         {
@@ -83,14 +64,6 @@ namespace MyFirstWPFApplication
                 toggles = 0
             },
         };
-
-
-        // buffer 0] = 0 - Startsbesksed
-        // buffer[1]
-        // buffer[2]
-        // buffer[3]
-        // buffer[4]
-        // buffer[5]
 
         int boardNr = 0;
         List<Board> boards = new();
@@ -110,7 +83,7 @@ namespace MyFirstWPFApplication
                     Board board = new Board();
                     board.B_ID = boardNr;
                     //boards.First(x => x.B_ID == 2);
-
+                    /*
                     if (boardNr == 1)
                     {
                         Board1Selector.Visibility = Visibility.Visible;
@@ -119,6 +92,7 @@ namespace MyFirstWPFApplication
                     {
                         Board2Selector.Visibility = Visibility.Visible;
                     }
+                    */
 
                     Scroller.Content += "Found a init message at board nr: " + boardNr + Environment.NewLine;
                     
@@ -140,6 +114,7 @@ namespace MyFirstWPFApplication
                         board.commands.Add("Fork");
                     }
                     boards.Add(board);
+                    //boardSelector.Items.Add("Board" + board.B_ID);
                 }
                 
                 /*
@@ -157,91 +132,6 @@ namespace MyFirstWPFApplication
             InitializeComponent();
             var t = listen();
             //var msgOut = new Rootobject();
-        }
-
-        private void Board1Selector_Click(object sender, RoutedEventArgs e)
-        {
-            var board1 = boards.First(x => x.B_ID == 1);
-            if (board1.commands.Contains("Led"))
-            {
-                LED.Visibility = Visibility.Visible;
-            }
-
-            if (board1.commands.Contains("StepM"))
-            {
-                StepM.Visibility = Visibility.Visible;
-            }
-
-            if (board1.commands.Contains("Fork"))
-            {
-                Fork.Visibility = Visibility.Visible;
-            }
-
-            BoardSel.Content = "Stepper board";
-            UDPoutEP = new IPEndPoint(IPAddress.Parse("192.168.1.123"), 72);
-            SendMessage.Visibility = Visibility.Visible;
-
-            Scroller.Content += "Target: " + UDPoutEP + Environment.NewLine;
-            Scroller.ScrollToBottom();
-
-            Toggles.Visibility = Visibility.Collapsed;
-            NumbRot.Visibility = Visibility.Collapsed;
-            Direction.Visibility = Visibility.Collapsed;
-            Freq.Visibility = Visibility.Collapsed;
-        }
-
-        private void Board2Selector_Click(object sender, RoutedEventArgs e)
-        {
-            var board2 = boards.First(x => x.B_ID == 2);
-            if (board2.commands.Contains("Led"))
-            {
-                LED.Visibility = Visibility.Visible;
-            } else LED.Visibility = Visibility.Collapsed;
-
-            if (board2.commands.Contains("StepM"))
-            {
-                StepM.Visibility = Visibility.Visible;
-            } else StepM.Visibility = Visibility.Collapsed;
-
-            if (board2.commands.Contains("Fork"))
-            {
-                Fork.Visibility = Visibility.Visible;
-            } else Fork.Visibility = Visibility.Collapsed;
-
-
-            BoardSel.Content = "LED Board";
-            UDPoutEP = new IPEndPoint(IPAddress.Parse("192.168.1.124"), 72);
-            SendMessage.Visibility = Visibility.Visible;
-
-            Scroller.Content += "Target: " + UDPoutEP + Environment.NewLine;
-            Scroller.ScrollToBottom();
-
-            Toggles.Visibility = Visibility.Collapsed;
-            NumbRot.Visibility = Visibility.Collapsed;
-            Direction.Visibility = Visibility.Collapsed;
-            Freq.Visibility = Visibility.Collapsed;
-            ComTest.Visibility = Visibility.Collapsed;
-
-            /*
-            LED.Visibility = Visibility.Visible;
-            Fork.Visibility = Visibility.Visible; 
-            */
-            FuncSelect.Visibility = Visibility.Visible;
-
-            /*
-            if (B2CmdP[1] == 1)
-            {
-                LED.Visibility = Visibility.Visible;
-            }
-            if (B2CmdP[2] == 1)
-            {
-                Fork.Visibility = Visibility.Visible;
-            }
-            if (B2CmdP[3] == 1)
-            {
-                StepM.Visibility = Visibility.Visible;
-            }
-            */
         }
 
         private void LED_Click(object sender, RoutedEventArgs e)
@@ -299,7 +189,6 @@ namespace MyFirstWPFApplication
             BoardSel.Content = "Stepper board";
             UDPoutEP = new IPEndPoint(IPAddress.Parse("192.168.1.123"), 72);
         }
-
         private void StepB_Click(object sender, RoutedEventArgs e)
         {
             DirectionStep.Content = "Counter Clockwise";
@@ -308,7 +197,6 @@ namespace MyFirstWPFApplication
             Freq.Visibility = Visibility.Visible;
             NumbRot.Visibility = Visibility.Visible;
         }
-
         private void StepF_Click(object sender, RoutedEventArgs e)
         {
             DirectionStep.Content = "Clockwise";
@@ -317,7 +205,6 @@ namespace MyFirstWPFApplication
             Freq.Visibility = Visibility.Visible;
             NumbRot.Visibility = Visibility.Visible;
         }
-
         private void GoZero_Click(object sender, RoutedEventArgs e)
         {
             DirectionStep.Content = "Go Zero";
@@ -326,7 +213,6 @@ namespace MyFirstWPFApplication
             Freq.Visibility = Visibility.Collapsed;
             NumbRot.Visibility = Visibility.Collapsed;
         }
-
         private void Send_Click(object sender, RoutedEventArgs e)
         {
             using var UDPout = new UdpClient(71);
@@ -350,31 +236,26 @@ namespace MyFirstWPFApplication
                 Scroller.ScrollToBottom();
             }
         }
-
         private void slRotations_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             UdpOut.op2 = (int)slRotations.Value;
             JsonOut._params.dir = (int)slRotations.Value;
         }
-
         private void slFreq_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             UdpOut.Value = (UInt16)SlFreq.Value;
         //    JsonOut._params.RPM = (UInt16)SlFreq.Value;
         }
-
         private void slToggle_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             UdpOut.op1 = (byte)slToggle.Value;
             JsonOut._params.toggles = (byte)slToggle.Value;
         }
-
         private void Clear_Click(object sender, RoutedEventArgs e)
         {
             Scroller.Content = "";
             Scroller.ScrollToBottom();
         }
-
         private void StartSeq_Click(object sender, RoutedEventArgs e)
         {
             StartSeq.Visibility = Visibility.Collapsed;
@@ -410,6 +291,19 @@ namespace MyFirstWPFApplication
                 Scroller.ScrollToBottom();
             }
         }
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            /*
+            if(boardSelector.Text == "Board1")
+            {
+                Scroller.Content += "Board 1" + Environment.NewLine ;
+            }
+            if (boardSelector.Text == "Board2")
+            {
+                Scroller.Content += "Board 2" + Environment.NewLine;
+            }
+            */
+        }
     }
 }
 
@@ -432,3 +326,83 @@ var Perso2 = JsonConvert.SerializeObject(Person2);
 
 Scroller.Content += Perso2 + Environment.NewLine;
 Scroller.ScrollToBottom();*/
+
+
+
+
+
+
+
+
+
+/*
+private void Board1Selector_Click(object sender, RoutedEventArgs e)
+{
+    var board1 = boards.First(x => x.B_ID == 1);
+    if (board1.commands.Contains("Led"))
+    {
+        LED.Visibility = Visibility.Visible;
+    }
+
+    if (board1.commands.Contains("StepM"))
+    {
+        StepM.Visibility = Visibility.Visible;
+    }
+
+    if (board1.commands.Contains("Fork"))
+    {
+        Fork.Visibility = Visibility.Visible;
+    }
+
+    BoardSel.Content = "Stepper board";
+    UDPoutEP = new IPEndPoint(IPAddress.Parse("192.168.1.123"), 72);
+    SendMessage.Visibility = Visibility.Visible;
+
+    Scroller.Content += "Target: " + UDPoutEP + Environment.NewLine;
+    Scroller.ScrollToBottom();
+
+    Toggles.Visibility = Visibility.Collapsed;
+    NumbRot.Visibility = Visibility.Collapsed;
+    Direction.Visibility = Visibility.Collapsed;
+    Freq.Visibility = Visibility.Collapsed;
+}
+
+private void Board2Selector_Click(object sender, RoutedEventArgs e)
+{
+    var board2 = boards.First(x => x.B_ID == 2);
+    if (board2.commands.Contains("Led"))
+    {
+        LED.Visibility = Visibility.Visible;
+    } else LED.Visibility = Visibility.Collapsed;
+
+    if (board2.commands.Contains("StepM"))
+    {
+        StepM.Visibility = Visibility.Visible;
+    } else StepM.Visibility = Visibility.Collapsed;
+
+    if (board2.commands.Contains("Fork"))
+    {
+        Fork.Visibility = Visibility.Visible;
+    } else Fork.Visibility = Visibility.Collapsed;
+
+
+    BoardSel.Content = "LED Board";
+    UDPoutEP = new IPEndPoint(IPAddress.Parse("192.168.1.124"), 72);
+    SendMessage.Visibility = Visibility.Visible;
+
+    Scroller.Content += "Target: " + UDPoutEP + Environment.NewLine;
+    Scroller.ScrollToBottom();
+
+    Toggles.Visibility = Visibility.Collapsed;
+    NumbRot.Visibility = Visibility.Collapsed;
+    Direction.Visibility = Visibility.Collapsed;
+    Freq.Visibility = Visibility.Collapsed;
+    ComTest.Visibility = Visibility.Collapsed;
+
+
+    // LED.Visibility = Visibility.Visible;
+    // Fork.Visibility = Visibility.Visible; 
+
+    FuncSelect.Visibility = Visibility.Visible
+}
+*/

@@ -13,4 +13,11 @@ public class Board
     public int type { get; set; }
     // public commands _commands { get; set; }
     public List<string> commands { get; set; } = new();
+    public string B_Name
+    {
+        get
+        {
+            return $"Board {B_ID}";
+        }
+    }
 }
