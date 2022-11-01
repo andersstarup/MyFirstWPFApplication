@@ -81,7 +81,7 @@ namespace MyFirstWPFApplication
                 byte[] array = dataRecieved.Buffer;
                 string text = Encoding.UTF8.GetString(dataRecieved.Buffer);
 
-                JsonConvert.DeserializeObject<Board>(text);
+                var myDeserializedClass = JsonConvert.DeserializeObject<List<Root>>(text);
 
 
                 Scroller.Content += "Message from " + dataRecieved.RemoteEndPoint + ": " + text + Environment.NewLine;
