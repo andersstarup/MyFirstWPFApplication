@@ -5,9 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyFirstWPFApplication"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800"
+        >
 
-    <Grid Height="434.04" Width="800">
+    <Grid Height="434.04" Width="800" x:Name="Grid1">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
@@ -60,7 +61,7 @@
                     Cursor="Hand"
                     Visibility="Collapsed"/>
             -->
-            <ComboBox x:Name="Boards">
+            <ComboBox x:Name="boxBoards" SelectionChanged="boxBoards_SelectionChanged">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel>
@@ -71,39 +72,50 @@
             </ComboBox>
         </StackPanel>
 
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="1" Grid.Row="0" Width="150"  x:Name="FuncSelect" Visibility="Collapsed">
+        <!--
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="1" Grid.Row="0" Width="150"  Visibility="Visible">
             <Label HorizontalAlignment="Center" 
-                   VerticalAlignment="Center" 
-                   x:Name="FuncSel" 
-                   >Select a func
+               x:Name="FuncSel"
+               Grid.Column="1" Grid.Row="0"
+               VerticalAlignment="Center" 
+               >Select a func
             </Label>
+        </StackPanel>
+        -->
+
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="1" Grid.Row="0" Width="150"  x:Name="FuncSelect" Visibility="Visible">
+            
             <Button x:Name = "StepM"  
                     Content="Stepper Motor" 
                     HorizontalAlignment="Center"  
                     Height="28" Width="150" 
                     Click="StepM_Click" 
-                    Cursor="Hand"/>
+                    Cursor="Hand"
+                    Visibility="Collapsed"/>
             <Button x:Name = "LED" 
                     Content="LED's" 
                     HorizontalAlignment="Center" 
                     VerticalAlignment="Top" 
                     Height="28" Width="150" 
                     Click="LED_Click" 
-                    Cursor="Hand"/>
+                    Cursor="Hand"
+                    Visibility="Collapsed"/>
             <Button x:Name = "Fork" 
                     Content="Fork Sensor" 
                     HorizontalAlignment="Center" 
                     VerticalAlignment="Top" 
                     Height="28" Width="150" 
                     Click="Fork_click" 
-                    Cursor="Hand"/>
+                    Cursor="Hand"
+                    Visibility="Collapsed"/>
 		    <Button x:Name = "ComTest" 
                     Content="Test com between board" 
                     HorizontalAlignment="Center" 
                     VerticalAlignment="Top" 
                     Height="28" Width="150" 
                     Click="ComTest_click" 
-                    Cursor="Hand"/>
+                    Cursor="Hand"
+                    Visibility="Collapsed"/>
         </StackPanel>
 
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="2" Grid.Row="0" Visibility="Collapsed" x:Name="Direction" Width="150">
@@ -182,10 +194,11 @@
 
         <ScrollViewer
             Padding="10,10,10,10"
+            
             Name="Scroller" 
             Background="Black" 
             Foreground="White" 
-            HorizontalAlignment="Center" 
+            HorizontalAlignment="Stretch" 
             VerticalAlignment="Center" 
             Grid.Column="0" 
             Grid.ColumnSpan="3" 
