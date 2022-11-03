@@ -81,11 +81,17 @@ namespace MyFirstWPFApplication
                 byte[] array = dataRecieved.Buffer;
                 string text = Encoding.UTF8.GetString(dataRecieved.Buffer);
 
-                var myDeserializedClass = JsonConvert.DeserializeObject<List<Root>>(text);
+                Board board = new();
+                board.Devices = JsonConvert.DeserializeObject<List<Root>>(text);
+
+                boards.Add(board);
+                boxBoards.ItemsSource = boards;
+
+
 
 
                 Scroller.Content += "Message from " + dataRecieved.RemoteEndPoint + ": " + text + Environment.NewLine;
-                
+                /*
                 if (array[0] == '0')
                 {
                     Waiting.Visibility = Visibility.Collapsed;
@@ -116,6 +122,7 @@ namespace MyFirstWPFApplication
                     boards.Add(board);                  // Tilføj board til listen boards.
                     boxBoards.ItemsSource = boards;     // Tilføj all boards til comboboxen i WPF.
                 }
+                */
                 
                 /*
                 else if (array[0] == '1')

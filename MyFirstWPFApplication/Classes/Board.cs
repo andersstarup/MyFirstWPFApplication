@@ -9,6 +9,7 @@ namespace MyFirstWPFApplication.Classes;
 public class Board
 {
     public int B_ID { get; set; }
+    public List<Root> Devices { get; set; } 
     public string IP_Addr { get; set; }
     public int type { get; set; }
     // public commands _commands { get; set; }
