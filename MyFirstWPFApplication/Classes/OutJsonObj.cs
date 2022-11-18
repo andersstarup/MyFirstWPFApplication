@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyFirstWPFApplication.Classes;
 
-public class Rootobject
+public class OutJsonObj
 {
     public string command { get; set; } = "";
     public int deviceID { get; set; }

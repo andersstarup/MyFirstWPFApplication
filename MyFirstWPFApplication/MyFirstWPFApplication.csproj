@@ -9,6 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Classes\Notes.cs" />
+    <Compile Remove="Classes\Param.cs" />
+    <Compile Remove="Classes\Root.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Mathias.ico" />
   </ItemGroup>
 

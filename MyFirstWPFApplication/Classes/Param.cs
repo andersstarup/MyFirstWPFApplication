@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace MyFirstWPFApplication.Classes;
     public class Param
     {
-    public string name { get; set; } = "";
+        public string name { get; set; } = "";
     }
+
 

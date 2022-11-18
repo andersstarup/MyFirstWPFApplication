@@ -56,7 +56,7 @@ namespace MyFirstWPFApplication
         //UdpClient UDPout = new UdpClient();
         IPEndPoint UDPoutEP = new IPEndPoint(IPAddress.Parse("192.168.1.0"), 72);
 
-        Rootobject JsonOut = new Rootobject()
+        OutJsonObj JsonOut = new OutJsonObj()
         {
             command = "",
             deviceID = 0,
@@ -81,8 +81,9 @@ namespace MyFirstWPFApplication
                 byte[] array = dataRecieved.Buffer;
                 string text = Encoding.UTF8.GetString(dataRecieved.Buffer);
 
-                Board board = new();
-                board.Devices = JsonConvert.DeserializeObject<List<Root>>(text);
+                Board Boards = new();
+                // board = JsonConvert.DeserializeObject<List<Board>>(text);
+                Board board = JsonConvert.DeserializeObject<Board>(text);
 
                 boards.Add(board);
                 boxBoards.ItemsSource = boards;
@@ -90,6 +91,7 @@ namespace MyFirstWPFApplication
 
 
 
+                board.b_IP = dataRecieved.RemoteEndPoint;
                 Scroller.Content += "Message from " + dataRecieved.RemoteEndPoint + ": " + text + Environment.NewLine;
                 /*
                 if (array[0] == '0')
@@ -261,7 +263,7 @@ namespace MyFirstWPFApplication
         }
         private void StartSeq_Click(object sender, RoutedEventArgs e)
         {
-            StartSeq.Visibility = Visibility.Collapsed;
+            //StartSeq.Visibility = Visibility.Collapsed;
             Waiting.Visibility = Visibility.Visible;
             boardNr = 0;
             var Start1 = new StartUP()
@@ -298,23 +300,28 @@ namespace MyFirstWPFApplication
         {
             var label = new Label() { Content = "Select a func" }; 
 
-
             this.FuncSelect.Children.Clear();
             this.FuncSelect.Children.Add(label);
-
-            foreach (var board in e.AddedItems.Cast<Board>())
+            foreach(var board in e.AddedItems.Cast<Board>())
             {
-                foreach(var command in board.commands)
+                foreach (var stepMs in board.devices.stepMs)
                 {
-                    Button button = new Button() { Content = command }; // Creating button
-                    button.Name = command + "_btn";
-                    
-                    button.Click += new RoutedEventHandler(button_click);
-                    this.FuncSelect.Children.Add(button);                    
+                    Scroller.Content += "StepM" + Environment.NewLine;
+                }
+
+                foreach (var leds in board.devices.leds)
+                {
+                    Scroller.Content += "led" + Environment.NewLine;
                 }
             }
         }
-        
+
+
+        private void boxDevice_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
         void button_click(object sender, EventArgs e)
         {
             //Get the button clicked
@@ -339,6 +346,7 @@ namespace MyFirstWPFApplication
 
             }
         }
+
     }
 }
 
@@ -448,3 +456,36 @@ private void Board2Selector_Click(object sender, RoutedEventArgs e)
                         Scroller.Content += button.Name + "hej" + Environment.NewLine;
                     };
                     */
+
+
+/*
+foreach (var board in e.AddedItems.Cast<Board>())
+{
+    foreach (var devices in board)
+    {
+        Button button = new Button() { Content = "hej1" }; // Creating button
+        button.Name = "hej";
+
+        button.Click += new RoutedEventHandler(button_click);
+        this.FuncSelect.Children.Add(button);
+    }
+}
+*/
+
+/*
+foreach (var board in boards)
+{
+    foreach(var Devices in board)
+    {
+        foreach (var Led in board)
+        {
+            Button button = new Button() { Content = board.b_name }; // Creating button
+            button.Name = board.b_name;
+
+            button.Click += new RoutedEventHandler(button_click);
+            this.FuncSelect.Children.Add(button);
+        }
+    }
+
+}
+*/

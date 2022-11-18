@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,17 +10,28 @@ namespace MyFirstWPFApplication.Classes;
 
 public class Board
 {
-    public int B_ID { get; set; }
-    public List<Root> Devices { get; set; } 
-    public string IP_Addr { get; set; }
-    public int type { get; set; }
-    // public commands _commands { get; set; }
-    public List<string> commands { get; set; } = new();
-    public string B_Name
-    {
-        get
-        {
-            return $"Board {B_ID}";
-        }
-    }
+    public IPEndPoint b_IP { get; set; }
+    public int b_id { get; set; } = 0;
+    public string b_name { get; set; } = "";
+    public Devices devices { get; set; }
+}
+
+public class Devices
+{
+    public List<Led> leds { get; set; }
+    public List<StepM> stepMs { get; set; }
+}
+
+public class Led
+{
+    public int dev_nr { get; set; } = 0;
+    public List<int> min_max { get; set; }
+    public string name { get; set; } = "";
+}
+
+public class StepM
+{
+    public int dev_nr { get; set; } = 0;
+    public List<int> min_max { get; set; }
+    public string name { get; set; } = "";
 }
