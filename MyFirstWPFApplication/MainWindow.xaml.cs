@@ -15,6 +15,8 @@ using static System.Net.Mime.MediaTypeNames;
 using System.Linq;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media.Animation;
+using System.Text.Json;
+using System.Reflection.PortableExecutable;
 
 namespace MyFirstWPFApplication
 {
@@ -72,7 +74,7 @@ namespace MyFirstWPFApplication
 
         int boardNr = 0;
         List<Board> boards = new();
-        
+      
         async Task listen()
         {
             while (true)
@@ -80,59 +82,29 @@ namespace MyFirstWPFApplication
                 var dataRecieved = await udpListener.ReceiveAsync();
                 byte[] array = dataRecieved.Buffer;
                 string text = Encoding.UTF8.GetString(dataRecieved.Buffer);
+                //Board Boards = new();
 
-                Board Boards = new();
-                // board = JsonConvert.DeserializeObject<List<Board>>(text);
-                Board board = JsonConvert.DeserializeObject<Board>(text);
-
-                boards.Add(board);
-                boxBoards.ItemsSource = boards;
-
-
-
-
-                board.b_IP = dataRecieved.RemoteEndPoint;
-                Scroller.Content += "Message from " + dataRecieved.RemoteEndPoint + ": " + text + Environment.NewLine;
-                /*
-                if (array[0] == '0')
-                {
-                    Waiting.Visibility = Visibility.Collapsed;
-                    boardNr ++;
-                    Board board = new Board();
-                    board.B_ID = boardNr;
-
-                    Scroller.Content += "Found a init message at: " + board.B_Name + Environment.NewLine;
-                    
-                    if (array[1] == '1')
-                    {
-                        Scroller.Content += "This Board has a LED" + Environment.NewLine;
-                        board.commands.Add("Led");
-                    }
-
-                    if (array[2] == '1')
-                    {
-                        Scroller.Content += "This Board has Stepper motor" + Environment.NewLine;
-                        board.commands.Add("StepM");
-                    }
-
-                    if (array[3] == '1')
-                    {
-                        Scroller.Content += "This Board has Fork sensor" + Environment.NewLine;
-                        board.commands.Add("Fork");
-                    }
-                    
-                    boards.Add(board);                  // Tilføj board til listen boards.
-                    boxBoards.ItemsSource = boards;     // Tilføj all boards til comboboxen i WPF.
-                }
-                */
                 
-                /*
-                else if (array[0] == '1')
+                Message msg = JsonConvert.DeserializeObject<Message>(text);
+                if(msg.msgType == 23)
                 {
-                    Scroller.Content += "Not a init message" + Environment.NewLine;
-                    array[0] = 140;
-                } 
-                */
+                    Board board = JsonConvert.DeserializeObject<Board>(Convert.ToString(msg.payload));
+                    boards.Add(board);
+                    boxBoards.ItemsSource = boards;
+
+                    board.b_IP = dataRecieved.RemoteEndPoint;
+
+                }
+                else if (msg.msgType == 1)
+                {
+                    Scroller.Content += "Message from " + dataRecieved.RemoteEndPoint + ": " + text + Environment.NewLine;
+                }
+                else
+                {
+                    Scroller.Content += "Message from " + dataRecieved.RemoteEndPoint + ": " + text + Environment.NewLine;
+                }
+                
+                
             }
         }
 
@@ -244,7 +216,7 @@ namespace MyFirstWPFApplication
         private void slRotations_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             UdpOut.op2 = (int)slRotations.Value;
-            JsonOut._params.dir = (int)slRotations.Value;
+            JsonOut._params.deg = (int)slRotations.Value;
         }
         private void slFreq_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
@@ -298,30 +270,60 @@ namespace MyFirstWPFApplication
         }
         private void boxBoards_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var label = new Label() { Content = "Select a func" }; 
 
-            this.FuncSelect.Children.Clear();
-            this.FuncSelect.Children.Add(label);
             foreach(var board in e.AddedItems.Cast<Board>())
             {
-                foreach (var stepMs in board.devices.stepMs)
-                {
-                    Scroller.Content += "StepM" + Environment.NewLine;
-                }
+                UDPoutEP = board.b_IP; 
 
-                foreach (var leds in board.devices.leds)
-                {
-                    Scroller.Content += "led" + Environment.NewLine;
-                }
+                boxDevices.ItemsSource = board.devices.GetAllDevices();
             }
         }
 
 
         private void boxDevice_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (e.AddedItems.Count > 0)
+            {
+                switch (((IDevice)e.AddedItems[0]).Type)
+                {
+                    case DeviceTypes.Led:       // Control for choosing LED in GUI
+                        Scroller.Content += "LED valgt" + Environment.NewLine;
 
+                        // FuncSel.Content = "LED";
+                        Direction.Visibility = Visibility.Collapsed;
+                        NumbRot.Visibility = Visibility.Collapsed;
+                        Freq.Visibility = Visibility.Collapsed;
+                        Toggles.Visibility = Visibility.Visible;
+
+                        JsonOut.command = "LED";
+                        UdpOut.addr = 1;
+
+                        break;
+                    case DeviceTypes.StepMotor: // Control for choosing StepMotor in GUI
+                        Scroller.Content += "StepM valgt" + Environment.NewLine;
+
+
+                        DirectionStep.Content = "Choose a direction";
+                        Toggles.Visibility = Visibility.Collapsed;
+
+                        Direction.Visibility = Visibility.Visible;
+
+                        JsonOut.command = "StepM";
+                        UdpOut.addr = 2;
+
+
+                        break;
+                    default:                    // No match from DeviceTypes
+                        Scroller.Content += "No comprendo" + Environment.NewLine;
+
+
+
+                        break;
+                }
+            }
         }
 
+        /*
         void button_click(object sender, EventArgs e)
         {
             //Get the button clicked
@@ -346,6 +348,7 @@ namespace MyFirstWPFApplication
 
             }
         }
+        */
 
     }
 }

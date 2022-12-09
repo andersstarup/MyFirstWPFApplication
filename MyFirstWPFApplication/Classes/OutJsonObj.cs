@@ -13,3 +13,10 @@ public class OutJsonObj
     public int GoZero { get; set; }
     public Params _params { get; set; }
 }
+public class Params
+{
+    public ushort RPM { get; set; }
+    public int deg { get; set; }
+    public int dir { get; set; }
+    public byte toggles { get; set; }
+}
